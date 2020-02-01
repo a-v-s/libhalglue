@@ -5,22 +5,19 @@
  *      Author: andre
  */
 
-
 // I'm spending more time trying to find the old code then it would take to re-implement it
-
-
 #include <string.h>
 #include "serialnumber.h"
 
-
-void FormatSerialHexASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_t out_size) {
+void FormatSerialHexASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
+		size_t out_size) {
 	uint8_t tmp_out[out_size];
-	memset(tmp_out,0,sizeof(tmp_out));
-	for (int i = 0 ; i < in_size; i++) {
-		tmp_out[i%out_size] += in_data[i%in_size];
+	memset(tmp_out, 0, sizeof(tmp_out));
+	for (int i = 0; i < in_size; i++) {
+		tmp_out[i % out_size] += in_data[i % in_size];
 	}
-	for (int i = 0 ; i < out_size; i++) {
-		uint8_t  tmp = tmp_out[i]%16;
+	for (int i = 0; i < out_size; i++) {
+		uint8_t tmp = tmp_out[i] % 16;
 		if (tmp < 10) {
 			out_str[i] = '0' + i;
 		} else {
@@ -29,17 +26,17 @@ void FormatSerialHexASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, si
 	}
 }
 
-
-void FormatSerialHexUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, size_t out_size) {
+void FormatSerialHexUTF16(uint8_t *in_data, size_t in_size, uint16_t *out_str,
+		size_t out_size) {
 	uint8_t tmp_out[out_size];
-	memset(tmp_out,0,sizeof(tmp_out));
-	for (int i = 0 ; i < in_size; i++) {
+	memset(tmp_out, 0, sizeof(tmp_out));
+	for (int i = 0; i < in_size; i++) {
 		// Add or Xor them, what looks better?
 		//tmp_out[i%out_size] += in_data[i%in_size];
-		tmp_out[i%out_size] ^= in_data[i%in_size];
+		tmp_out[i % out_size] ^= in_data[i % in_size];
 	}
-	for (int i = 0 ; i < out_size; i++) {
-		uint8_t  tmp = tmp_out[i]%16;
+	for (int i = 0; i < out_size; i++) {
+		uint8_t tmp = tmp_out[i] % 16;
 		if (tmp < 10) {
 			out_str[i] = '0' + tmp;
 		} else {
@@ -48,14 +45,15 @@ void FormatSerialHexUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, s
 	}
 }
 
-void FormatSerialStringASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_t out_size) {
+void FormatSerialStringASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
+		size_t out_size) {
 	uint8_t tmp_out[out_size];
-	memset(tmp_out,0,sizeof(tmp_out));
-	for (int i = 0 ; i < in_size; i++) {
-		tmp_out[i%out_size] += in_data[i%in_size];
+	memset(tmp_out, 0, sizeof(tmp_out));
+	for (int i = 0; i < in_size; i++) {
+		tmp_out[i % out_size] += in_data[i % in_size];
 	}
-	for (int i = 0 ; i < out_size; i++) {
-		uint8_t  tmp = tmp_out[i]%36;
+	for (int i = 0; i < out_size; i++) {
+		uint8_t tmp = tmp_out[i] % 36;
 		if (tmp < 10) {
 			out_str[i] = '0' + i;
 		} else {
@@ -64,16 +62,17 @@ void FormatSerialStringASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str,
 	}
 }
 
-void FormatSerialStringUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, size_t out_size) {
+void FormatSerialStringUTF16(uint8_t *in_data, size_t in_size,
+		uint16_t *out_str, size_t out_size) {
 	uint8_t tmp_out[out_size];
-	memset(tmp_out,0,sizeof(tmp_out));
-	for (int i = 0 ; i < in_size; i++) {
+	memset(tmp_out, 0, sizeof(tmp_out));
+	for (int i = 0; i < in_size; i++) {
 		// Add or Xor them, what looks better?
 		//tmp_out[i%out_size] += in_data[i%in_size];
-		tmp_out[i%out_size] ^= in_data[i%in_size];
+		tmp_out[i % out_size] ^= in_data[i % in_size];
 	}
-	for (int i = 0 ; i < out_size; i++) {
-		uint8_t  tmp = tmp_out[i]%36;
+	for (int i = 0; i < out_size; i++) {
+		uint8_t tmp = tmp_out[i] % 36;
 		if (tmp < 10) {
 			out_str[i] = '0' + tmp;
 		} else {
@@ -82,45 +81,53 @@ void FormatSerialStringUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str
 	}
 }
 
-void GetHardwareSerial(uint8_t** ptr, size_t* size) {
+void GetHardwareSerial(uint8_t **ptr, size_t *size) {
 	// We need a hardware family header thing
+	// FOr now, we have
+	// http://blog.gorski.pm/stm32-unique-id
 #if defined STM32F103xB
 	*ptr= (uint8_t*)0x1FFFF7E8;
 	*size = 12;
 #elif defined STM32L151xC
 	*ptr= (uint8_t*) 0x1FF800D0;
 	*size = 12;
+#elif defined STM32F303xC
+	*ptr= (uint8_t*) 0x1FFFF7AC;
+	*size = 12;
 #elif defined NRF52840_XXAA
 	*ptr= (uint8_t*) 0x10000060;
 	*size = 8;
 #else
 	// Not supported
-	*ptr= NULL;
+	*ptr = NULL;
 	*size = 0;
 #endif
 
 }
 
 // Convenience functions
-void GetSerialStringASCII(uint8_t* out_str, size_t out_size){
-	uint8_t* hw_serial_prt; size_t hw_serial_size;
-	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialStringASCII(hw_serial_prt,hw_serial_size,out_str,out_size);
+void GetSerialStringASCII(uint8_t *out_str, size_t out_size) {
+	uint8_t *hw_serial_prt;
+	size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt, &hw_serial_size);
+	FormatSerialStringASCII(hw_serial_prt, hw_serial_size, out_str, out_size);
 }
-void GetSerialStringUTF16(uint16_t* out_str, size_t out_size){
-	uint8_t* hw_serial_prt; size_t hw_serial_size;
-	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialStringUTF16(hw_serial_prt,hw_serial_size,out_str,out_size);
+void GetSerialStringUTF16(uint16_t *out_str, size_t out_size) {
+	uint8_t *hw_serial_prt;
+	size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt, &hw_serial_size);
+	FormatSerialStringUTF16(hw_serial_prt, hw_serial_size, out_str, out_size);
 }
 
-
-void GetSerialHexASCII(uint8_t* out_str, size_t out_size){
-	uint8_t* hw_serial_prt; size_t hw_serial_size;
-	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialHexASCII(hw_serial_prt,hw_serial_size,out_str,out_size);
+void GetSerialHexASCII(uint8_t *out_str, size_t out_size) {
+	uint8_t *hw_serial_prt;
+	size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt, &hw_serial_size);
+	FormatSerialHexASCII(hw_serial_prt, hw_serial_size, out_str, out_size);
 }
-void GetSerialHexUTF16(uint16_t* out_str, size_t out_size){
-	uint8_t* hw_serial_prt; size_t hw_serial_size;
-	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialHexUTF16(hw_serial_prt,hw_serial_size,out_str,out_size);
+void GetSerialHexUTF16(uint16_t *out_str, size_t out_size) {
+	uint8_t *hw_serial_prt;
+	size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt, &hw_serial_size);
+	FormatSerialHexUTF16(hw_serial_prt, hw_serial_size, out_str, out_size);
 }
