@@ -13,11 +13,42 @@
 #include "serialnumber.h"
 
 
+void FormatSerialHexASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_t out_size) {
+	uint8_t tmp_out[out_size];
+	memset(tmp_out,0,sizeof(tmp_out));
+	for (int i = 0 ; i < in_size; i++) {
+		tmp_out[i%out_size] += in_data[i%in_size];
+	}
+	for (int i = 0 ; i < out_size; i++) {
+		uint8_t  tmp = tmp_out[i]%16;
+		if (tmp < 10) {
+			out_str[i] = '0' + i;
+		} else {
+			out_str[i] = 'A' + i - 10;
+		}
+	}
+}
 
 
+void FormatSerialHexUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, size_t out_size) {
+	uint8_t tmp_out[out_size];
+	memset(tmp_out,0,sizeof(tmp_out));
+	for (int i = 0 ; i < in_size; i++) {
+		// Add or Xor them, what looks better?
+		//tmp_out[i%out_size] += in_data[i%in_size];
+		tmp_out[i%out_size] ^= in_data[i%in_size];
+	}
+	for (int i = 0 ; i < out_size; i++) {
+		uint8_t  tmp = tmp_out[i]%16;
+		if (tmp < 10) {
+			out_str[i] = '0' + tmp;
+		} else {
+			out_str[i] = 'A' + tmp - 10;
+		}
+	}
+}
 
-
-void FormatSerialASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_t out_size) {
+void FormatSerialStringASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out,0,sizeof(tmp_out));
 	for (int i = 0 ; i < in_size; i++) {
@@ -33,7 +64,7 @@ void FormatSerialASCII(uint8_t* in_data, size_t in_size, uint8_t* out_str, size_
 	}
 }
 
-void FormatSerialUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, size_t out_size) {
+void FormatSerialStringUTF16(uint8_t* in_data, size_t in_size, uint16_t* out_str, size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out,0,sizeof(tmp_out));
 	for (int i = 0 ; i < in_size; i++) {
@@ -71,13 +102,25 @@ void GetHardwareSerial(uint8_t** ptr, size_t* size) {
 }
 
 // Convenience functions
-void GetSerialASCII(uint8_t* out_str, size_t out_size){
+void GetSerialStringASCII(uint8_t* out_str, size_t out_size){
 	uint8_t* hw_serial_prt; size_t hw_serial_size;
 	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialASCII(hw_serial_prt,hw_serial_size,out_str,out_size);
+	FormatSerialStringASCII(hw_serial_prt,hw_serial_size,out_str,out_size);
 }
-void GetSerialUTF16(uint16_t* out_str, size_t out_size){
+void GetSerialStringUTF16(uint16_t* out_str, size_t out_size){
 	uint8_t* hw_serial_prt; size_t hw_serial_size;
 	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
-	FormatSerialUTF16(hw_serial_prt,hw_serial_size,out_str,out_size);
+	FormatSerialStringUTF16(hw_serial_prt,hw_serial_size,out_str,out_size);
+}
+
+
+void GetSerialHexASCII(uint8_t* out_str, size_t out_size){
+	uint8_t* hw_serial_prt; size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
+	FormatSerialHexASCII(hw_serial_prt,hw_serial_size,out_str,out_size);
+}
+void GetSerialHexUTF16(uint16_t* out_str, size_t out_size){
+	uint8_t* hw_serial_prt; size_t hw_serial_size;
+	GetHardwareSerial(&hw_serial_prt,&hw_serial_size);
+	FormatSerialHexUTF16(hw_serial_prt,hw_serial_size,out_str,out_size);
 }
