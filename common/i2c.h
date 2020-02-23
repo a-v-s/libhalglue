@@ -1,7 +1,8 @@
 /*
-    MIT License
+	File: i2c.h
+    License: MIT
 
-    Copyright (c) 2018, 2019 André van Schoubroeck
+    Copyright (c) 2018, 2019, 2020 André van Schoubroeck
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

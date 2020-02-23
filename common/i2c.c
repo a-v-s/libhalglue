@@ -1,5 +1,6 @@
 /*
-    MIT License
+	License:	MIT
+	File:		i2c.c
 
     Copyright (c) 2018, 2019 André van Schoubroeck
 
