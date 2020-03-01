@@ -22,6 +22,14 @@ defined (NRF9160_XXAA)
 	#include "system_nrf.h"	
 	#include "nrf.h"
 	#include "nrf_hal.h"
+
+	#ifndef UID_BASE
+		#define UID_BASE (0x10000060)
+	#endif
+	#ifndef UID_LEN
+		#define UID_LEN (8)
+	#endif
+
 #endif
 
 #if defined (STM32F030x6) || defined (STM32F030x8) ||                           \
@@ -153,8 +161,19 @@ defined (NRF9160_XXAA)
 #include "stm32wbxx_hal_conf.h"
 #endif
 
+#if defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || \
+	defined(STM32F3) || defined(STM32F4) || defined(STM32F7) || \
+	defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || \
+	defined(STM32L5) || defined(STM32G0) || defined(STM32G4) || \
+	defined(STM32WB) 
+	#ifndef STM32
+		#define STM32
+	#endif
+	#ifndef UID_LEN
+		#define UID_LEN (12)
+	#endif
 
-
+#endif
 
 
 

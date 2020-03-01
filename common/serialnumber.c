@@ -26,7 +26,7 @@
 // I'm spending more time trying to find the old code then it would take to re-implement it
 #include <string.h>
 #include "serialnumber.h"
-//#include "hal.h"
+#include "hal.h"
 
 void FormatSerialHexASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
 		size_t out_size) {
@@ -104,10 +104,17 @@ void GetHardwareSerial(uint8_t **ptr, size_t *size) {
 	// We need a hardware family header thing
 	// FOr now, we have
 	// http://blog.gorski.pm/stm32-unique-id
-	// Please note the HAL defines this addess UID_BASE
+	// Please note the STM32 HAL defines this addess UID_BASE
 	// So we can use the HAL instead. Generate a geneic STM32 case
+	
+	// Also our HAL-Abstraction Layer can provide the same for NRF5x and
+	// If it also defined UID_LEN we can make it work for either
 
+	// Note there are MCUs that don't expose their serial number
+	// as a pointer in memory space.
+	// If we consider non-Cortex-M targets, Atmel's AVR does not
 
+/*
 #if defined STM32F072xB
 	*ptr= (uint8_t*)0x1FFFF7AC;
 	*size = 12;
@@ -123,6 +130,10 @@ void GetHardwareSerial(uint8_t **ptr, size_t *size) {
 #elif defined NRF52_SERIES
 	*ptr= (uint8_t*) 0x10000060;
 	*size = 8;
+*/
+#if defined(UID_BASE) && defined(UID_LEN)
+	*ptr= (uint8_t*) UID_BASE;
+	*size = UID_LEN;
 #else
 	// Not supported
 	*ptr = NULL;
