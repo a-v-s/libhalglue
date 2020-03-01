@@ -39,7 +39,7 @@
 // <e> NRFX_ADC_ENABLED - nrfx_adc - ADC peripheral driver
 //==========================================================
 #ifndef NRFX_ADC_ENABLED
-#define NRFX_ADC_ENABLED 0
+#define NRFX_ADC_ENABLED 1
 #endif
 // <o> NRFX_ADC_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
 
@@ -108,7 +108,7 @@
 // <e> NRFX_CLOCK_ENABLED - nrfx_clock - CLOCK peripheral driver
 //==========================================================
 #ifndef NRFX_CLOCK_ENABLED
-#define NRFX_CLOCK_ENABLED 0
+#define NRFX_CLOCK_ENABLED 1
 #endif
 // <o> NRFX_CLOCK_CONFIG_LF_SRC  - LF Clock Source
 
@@ -117,13 +117,13 @@
 // <2=> Synth
 
 #ifndef NRFX_CLOCK_CONFIG_LF_SRC
-#define NRFX_CLOCK_CONFIG_LF_SRC 1
+	#define NRFX_CLOCK_CONFIG_LF_SRC 0
 #endif
 
 // <q> NRFX_CLOCK_CONFIG_LF_CAL_ENABLED  - Enables LF Clock Calibration Support
 
 #ifndef NRFX_CLOCK_CONFIG_LF_CAL_ENABLED
-#define NRFX_CLOCK_CONFIG_LF_CAL_ENABLED 0
+#define NRFX_CLOCK_CONFIG_LF_CAL_ENABLED 1
 #endif
 
 // <o> NRFX_CLOCK_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -193,7 +193,7 @@
 // <e> NRFX_GPIOTE_ENABLED - nrfx_gpiote - GPIOTE peripheral driver
 //==========================================================
 #ifndef NRFX_GPIOTE_ENABLED
-#define NRFX_GPIOTE_ENABLED 0
+#define NRFX_GPIOTE_ENABLED 1
 #endif
 // <o> NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins
 #ifndef NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
@@ -267,7 +267,7 @@
 // <e> NRFX_LPCOMP_ENABLED - nrfx_lpcomp - LPCOMP peripheral driver
 //==========================================================
 #ifndef NRFX_LPCOMP_ENABLED
-#define NRFX_LPCOMP_ENABLED 0
+#define NRFX_LPCOMP_ENABLED 1
 #endif
 
 // <o> NRFX_LPCOMP_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -337,7 +337,7 @@
 // <e> NRFX_NVMC_ENABLED - nrfx_nvmc - NVMC peripheral driver
 //==========================================================
 #ifndef NRFX_NVMC_ENABLED
-#define NRFX_NVMC_ENABLED 0
+#define NRFX_NVMC_ENABLED 1
 #endif
 
 // </e>
@@ -345,7 +345,7 @@
 // <e> NRFX_POWER_ENABLED - nrfx_power - POWER peripheral driver
 //==========================================================
 #ifndef NRFX_POWER_ENABLED
-#define NRFX_POWER_ENABLED 0
+#define NRFX_POWER_ENABLED 1
 #endif
 // <o> NRFX_POWER_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
 
@@ -363,7 +363,7 @@
 // <e> NRFX_PPI_ENABLED - nrfx_ppi - PPI peripheral allocator
 //==========================================================
 #ifndef NRFX_PPI_ENABLED
-#define NRFX_PPI_ENABLED 0
+#define NRFX_PPI_ENABLED 1
 #endif
 // <e> NRFX_PPI_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
@@ -421,20 +421,20 @@
 // <e> NRFX_PRS_ENABLED - nrfx_prs - Peripheral Resource Sharing module
 //==========================================================
 #ifndef NRFX_PRS_ENABLED
-#define NRFX_PRS_ENABLED 0
+#define NRFX_PRS_ENABLED 1
 #endif
 // <q> NRFX_PRS_BOX_0_ENABLED  - Enables box 0 in the module.
 
 
 #ifndef NRFX_PRS_BOX_0_ENABLED
-#define NRFX_PRS_BOX_0_ENABLED 0
+#define NRFX_PRS_BOX_0_ENABLED 1
 #endif
 
 // <q> NRFX_PRS_BOX_1_ENABLED  - Enables box 1 in the module.
 
 
 #ifndef NRFX_PRS_BOX_1_ENABLED
-#define NRFX_PRS_BOX_1_ENABLED 0
+#define NRFX_PRS_BOX_1_ENABLED 1
 #endif
 
 // <e> NRFX_PRS_CONFIG_LOG_ENABLED - Enables logging in the module.
@@ -493,7 +493,7 @@
 // <e> NRFX_QDEC_ENABLED - nrfx_qdec - QDEC peripheral driver
 //==========================================================
 #ifndef NRFX_QDEC_ENABLED
-#define NRFX_QDEC_ENABLED 0
+#define NRFX_QDEC_ENABLED 1
 #endif
 
 // <o> NRFX_QDEC_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -563,7 +563,7 @@
 // <e> NRFX_RNG_ENABLED - nrfx_rng - RNG peripheral driver
 //==========================================================
 #ifndef NRFX_RNG_ENABLED
-#define NRFX_RNG_ENABLED 0
+#define NRFX_RNG_ENABLED 1
 #endif
 
 // <o> NRFX_RNG_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -633,18 +633,18 @@
 // <e> NRFX_RTC_ENABLED - nrfx_rtc - RTC peripheral driver
 //==========================================================
 #ifndef NRFX_RTC_ENABLED
-#define NRFX_RTC_ENABLED 0
+#define NRFX_RTC_ENABLED 1
 #endif
 // <q> NRFX_RTC0_ENABLED  - Enable RTC0 instance
 
 #ifndef NRFX_RTC0_ENABLED
-#define NRFX_RTC0_ENABLED 0
+#define NRFX_RTC0_ENABLED 1
 #endif
 
 // <q> NRFX_RTC1_ENABLED  - Enable RTC1 instance
 
 #ifndef NRFX_RTC1_ENABLED
-#define NRFX_RTC1_ENABLED 0
+#define NRFX_RTC1_ENABLED 1
 #endif
 
 // <o> NRFX_RTC_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -714,13 +714,13 @@
 // <e> NRFX_SPIS_ENABLED - nrfx_spis - SPIS peripheral driver
 //==========================================================
 #ifndef NRFX_SPIS_ENABLED
-#define NRFX_SPIS_ENABLED 0
+#define NRFX_SPIS_ENABLED 1
 #endif
 // <q> NRFX_SPIS1_ENABLED  - Enable SPIS1 instance
 
 
 #ifndef NRFX_SPIS1_ENABLED
-#define NRFX_SPIS1_ENABLED 0
+#define NRFX_SPIS1_ENABLED 1
 #endif
 
 // <o> NRFX_SPIS_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -790,20 +790,20 @@
 // <e> NRFX_SPI_ENABLED - nrfx_spi - SPI peripheral driver
 //==========================================================
 #ifndef NRFX_SPI_ENABLED
-#define NRFX_SPI_ENABLED 0
+#define NRFX_SPI_ENABLED 1
 #endif
 // <q> NRFX_SPI0_ENABLED  - Enable SPI0 instance
 
 
 #ifndef NRFX_SPI0_ENABLED
-#define NRFX_SPI0_ENABLED 0
+#define NRFX_SPI0_ENABLED 1
 #endif
 
 // <q> NRFX_SPI1_ENABLED  - Enable SPI1 instance
 
 
 #ifndef NRFX_SPI1_ENABLED
-#define NRFX_SPI1_ENABLED 0
+#define NRFX_SPI1_ENABLED 1
 #endif
 
 // <o> NRFX_SPI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -873,7 +873,7 @@
 // <e> NRFX_TEMP_ENABLED - nrfx_temp - TEMP peripheral driver
 //==========================================================
 #ifndef NRFX_TEMP_ENABLED
-#define NRFX_TEMP_ENABLED 0
+#define NRFX_TEMP_ENABLED 1
 #endif
 
 // <o> NRFX_TEMP_DEFAULT_CONFIG_IRQ_PRIORITY - Interrupt priority
@@ -892,25 +892,25 @@
 // <e> NRFX_TIMER_ENABLED - nrfx_timer - TIMER periperal driver
 //==========================================================
 #ifndef NRFX_TIMER_ENABLED
-#define NRFX_TIMER_ENABLED 0
+#define NRFX_TIMER_ENABLED 1
 #endif
 
 // <q> NRFX_TIMER0_ENABLED  - Enable TIMER0 instance
 
 #ifndef NRFX_TIMER0_ENABLED
-#define NRFX_TIMER0_ENABLED 0
+#define NRFX_TIMER0_ENABLED 1
 #endif
 
 // <q> NRFX_TIMER1_ENABLED  - Enable TIMER1 instance
 
 #ifndef NRFX_TIMER1_ENABLED
-#define NRFX_TIMER1_ENABLED 0
+#define NRFX_TIMER1_ENABLED 1
 #endif
 
 // <q> NRFX_TIMER2_ENABLED  - Enable TIMER2 instance
 
 #ifndef NRFX_TIMER2_ENABLED
-#define NRFX_TIMER2_ENABLED 0
+#define NRFX_TIMER2_ENABLED 1
 #endif
 
 // <o> NRFX_TIMER_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -980,19 +980,19 @@
 // <e> NRFX_TWI_ENABLED - nrfx_twi - TWI peripheral driver
 //==========================================================
 #ifndef NRFX_TWI_ENABLED
-#define NRFX_TWI_ENABLED 0
+#define NRFX_TWI_ENABLED 1
 #endif
 
 // <q> NRFX_TWI0_ENABLED  - Enable TWI0 instance
 
 #ifndef NRFX_TWI0_ENABLED
-#define NRFX_TWI0_ENABLED 0
+#define NRFX_TWI0_ENABLED 1
 #endif
 
 // <q> NRFX_TWI1_ENABLED  - Enable TWI1 instance
 
 #ifndef NRFX_TWI1_ENABLED
-#define NRFX_TWI1_ENABLED 0
+#define NRFX_TWI1_ENABLED 1
 #endif
 
 // <o> NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -1062,13 +1062,13 @@
 // <e> NRFX_UART_ENABLED - nrfx_uart - UART peripheral driver
 //==========================================================
 #ifndef NRFX_UART_ENABLED
-#define NRFX_UART_ENABLED 0
+#define NRFX_UART_ENABLED 1
 #endif
 
 // <q> NRFX_UART0_ENABLED - Enable UART0 instance
 
 #ifndef NRFX_UART0_ENABLED
-#define NRFX_UART0_ENABLED 0
+#define NRFX_UART0_ENABLED 1
 #endif
 
 // <o> NRFX_UART_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -1138,13 +1138,13 @@
 // <e> NRFX_WDT_ENABLED - nrfx_wdt - WDT peripheral driver
 //==========================================================
 #ifndef NRFX_WDT_ENABLED
-#define NRFX_WDT_ENABLED 0
+#define NRFX_WDT_ENABLED 1
 #endif
 
 // <q> NRFX_WDT0_ENABLED  - Enable WDT0 instance
 
 #ifndef NRFX_WDT0_ENABLED
-#define NRFX_WDT0_ENABLED 0
+#define NRFX_WDT0_ENABLED 1
 #endif
 
 // <o> NRFX_WDT_CONFIG_NO_IRQ  - Remove WDT IRQ handling from WDT driver
