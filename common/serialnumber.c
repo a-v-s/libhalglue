@@ -26,6 +26,7 @@
 // I'm spending more time trying to find the old code then it would take to re-implement it
 #include <string.h>
 #include "serialnumber.h"
+//#include "hal.h"
 
 void FormatSerialHexASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
 		size_t out_size) {
@@ -103,16 +104,23 @@ void GetHardwareSerial(uint8_t **ptr, size_t *size) {
 	// We need a hardware family header thing
 	// FOr now, we have
 	// http://blog.gorski.pm/stm32-unique-id
-#if defined STM32F103xB
+	// Please note the HAL defines this addess UID_BASE
+	// So we can use the HAL instead. Generate a geneic STM32 case
+
+
+#if defined STM32F072xB
+	*ptr= (uint8_t*)0x1FFFF7AC;
+	*size = 12;
+#elif defined STM32F1
 	*ptr= (uint8_t*)0x1FFFF7E8;
 	*size = 12;
 #elif defined STM32L151xC
 	*ptr= (uint8_t*) 0x1FF800D0;
 	*size = 12;
-#elif defined STM32F303xC
+#elif defined STM32F3
 	*ptr= (uint8_t*) 0x1FFFF7AC;
 	*size = 12;
-#elif defined NRF52840_XXAA
+#elif defined NRF52_SERIES
 	*ptr= (uint8_t*) 0x10000060;
 	*size = 8;
 #else
