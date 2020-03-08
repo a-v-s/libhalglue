@@ -161,6 +161,8 @@ defined (NRF9160_XXAA)
 #include "stm32wbxx_hal_conf.h"
 #endif
 
+
+
 #if defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || \
 	defined(STM32F3) || defined(STM32F4) || defined(STM32F7) || \
 	defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || \
@@ -175,6 +177,44 @@ defined (NRF9160_XXAA)
 
 #endif
 
+#if defined (GD32F10X_MD) || defined (GD32F10X_HD) || defined (GD32F10X_XD) || defined (GD32F10X_CL)
+#include "system_gd32f10x.h"
+#include "gd32f10x.h"
+
+	// TODO USB
+
+	#ifndef UID_BASE
+	// On a quick glance I couldn't find a define for this in the GD32 library
+		#define UID_BASE (0x1FFFF7E8)
+	#endif
+	#ifndef UID_LEN
+		#define UID_LEN (12)
+	#endif
+
+	#ifndef GD32
+		#define GD32
+	#endif
+#endif
+
+#if defined (GD32VF103x4) || defined (GD32VF103x6) || defined (GD32VF103x8) || defined (GD32VF103xB)
+#include "system_gd32vf103.h"
+#include "gd32vf103.h"
+
+	// TODO USB
+
+	#ifndef UID_BASE
+	// On a quick glance I couldn't find a define for this in the GD32 library
+		#define UID_BASE (0x1FFFF7E8)
+	#endif
+	#ifndef UID_LEN
+		#define UID_LEN (12)
+	#endif
+
+	#ifndef GD32
+		#define GD32
+	#endif
+#endif
+    
 
 
 #endif // __MCU_H__

@@ -1,5 +1,6 @@
 #include "nrf.h"
 
+/*
 #include "nrf_adc.h"
 
 #include "nrf_bprot.h"
@@ -18,6 +19,7 @@
 #include "nrf_regulators.h"
 #include "nrf_reset.h"
 #include "nrf_usbreg.h"
+*/
 
 #include "nrf_aar.h"
 #include "nrf_acl.h"
