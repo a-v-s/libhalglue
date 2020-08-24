@@ -131,6 +131,11 @@ void GetHardwareSerial(uint8_t **ptr, size_t *size) {
 	*ptr= (uint8_t*) 0x10000060;
 	*size = 8;
 */
+	// On some targets, eg STM32L0, the serial number appears to be 
+	// non-contiguous. So we'll have to look at some other implementation.
+	// using LL_GetUID_Word{0,1,2}. If so, we'll need to allocate some RAM here.
+	// Damnit... I wanted to avoid that. 
+	
 #if defined(UID_BASE) && defined(UID_LEN)
 	*ptr= (uint8_t*) UID_BASE;
 	*size = UID_LEN;
