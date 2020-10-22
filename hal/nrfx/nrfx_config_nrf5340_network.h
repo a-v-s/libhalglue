@@ -95,7 +95,7 @@
 // <3=> Synth
 
 #ifndef NRFX_CLOCK_CONFIG_LF_SRC
-#define NRFX_CLOCK_CONFIG_LF_SRC 2
+#define NRFX_CLOCK_CONFIG_LF_SRC 1
 #endif
 
 // <q> NRFX_CLOCK_CONFIG_LF_CAL_ENABLED  - Enables LF Clock Calibration Support
