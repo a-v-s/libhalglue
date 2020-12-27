@@ -14,4 +14,8 @@ typedef struct {
 } bshal_spim_t;
 
 
-int bshal_spim_init(bshal_spim_t * config);
+int bshal_spim_init(bshal_spim_t * bshal_spim);
+
+int bshal_spim_transmit(bshal_spim_t * bshal_spim, void *data, size_t amount, bool nostop);
+int bshal_spim_recveive(bshal_spim_t * bshal_spim, void *data, size_t amount, bool nostop);
+int bshal_spim_transceive(bshal_spim_t * bshal_spim, void *data, size_t amount);

@@ -1,4 +1,9 @@
 
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "bshal_gpio_stm32.h"
 
 uint8_t bshal_gpio_encode_pin(GPIO_TypeDef *port, uint16_t pin) {
@@ -135,4 +140,12 @@ void bshal_gpio_decode_pin(uint8_t bs_pin, GPIO_TypeDef **port, uint16_t *pin) {
 	if ( (bs_pin & 0xF0)  == ( 14 << 4) )
 		*port = GPIOO;
 #endif	
+}
+
+void bshal_gpio_write_pin(uint8_t bs_pin, bool val) {
+	GPIO_TypeDef *port = NULL;
+	uint16_t pin = -1;
+	bshal_gpio_decode_pin(bs_pin,&port,&pin);
+	if (port)
+		HAL_GPIO_WritePin(port, pin, val);
 }
