@@ -29,13 +29,29 @@
 // TODO: What are the preprocessor defines for the CM* cores to include the 
 //		correct core_cm?.h file
 
+
+
 #if defined STM32F103xB
 #include "stm32f103xb.h"
 #include "core_cm3.h"
 #elif defined NRF52840_XXAA
 #include "nrf52840.h"
 #include "core_cm4.h"
+#elif defined STM32F411xE
+#include "stm32f411xe.h"
+#include "core_cm4.h"
 #endif
+
+
+/*
+#if defined __ARM_ARCH_6M__
+#include "core_cm0.h"
+#elif defined __ARM_ARCH_7M__
+#include "core_cm3.h"
+#elif defined __ARM_ARCH_7EM__
+#include "core_cm4.h"
+#endif
+*/
 
 #include "arm_cpuid.h"
 

@@ -39,14 +39,20 @@ int i2c_present(i2c_instance_t* i2c_instance, uint8_t address){
 // Convinience functions
 int i2c_send_reg(i2c_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
     int result;
+    /*
     result = i2c_send(i2c_instance, address, &reg, 1, true);
     if (result) return result;
-    return i2c_send(i2c_instance, reg, p_data, length, false);
+    return i2c_send(i2c_instance, address, p_data, length, false);
+    */
+    uint8_t buffer[1+length];
+    buffer[0] = reg;
+    memcpy(buffer+1, p_data, length);
+    return i2c_send(i2c_instance, address, buffer, 1+length, false);
 }
 
 int i2c_recv_reg(i2c_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
     int result;
     result = i2c_send(i2c_instance, address, &reg, 1, true);
     if (result) return result;
-    return i2c_recv(i2c_instance, reg, p_data, length);
+    return i2c_recv(i2c_instance, address, p_data, length);
 }

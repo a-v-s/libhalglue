@@ -28,13 +28,13 @@
 
 #include "i2c.h"
 
-#include "nrfx_twi.h"
-#include "nrf_gpio.h
+#include "nrfx_twim.h"
+#include "nrf_gpio.h"
 
-int32_t halgue_nrfx_i2c_init(nrfx_twi_t* twi_instance, int scl_pin, int sda_pin, i2c_instance_t *i2c_instance);
-int32_t halgue_nrfx_i2c_send(nrfx_twi_t* twi_instance, uint8_t address, uint8_t * p_data, uint8_t length);
-int32_t halgue_nrfx_i2c_recv(nrfx_twi_t* twi_instance, uint8_t address, uint8_t * p_data, uint8_t length);
-int32_t halgue_nrfx_i2c_isok(nrfx_twi_t* twi_instance, uint8_t address);
+int32_t halgue_nrfx_i2c_init(nrfx_twim_t* twi_instance, int scl_pin, int sda_pin, i2c_instance_t *i2c_instance);
+int32_t halgue_nrfx_i2c_send(nrfx_twim_t* twi_instance, uint8_t address, uint8_t * p_data, uint8_t length);
+int32_t halgue_nrfx_i2c_recv(nrfx_twim_t* twi_instance, uint8_t address, uint8_t * p_data, uint8_t length);
+int32_t halgue_nrfx_i2c_isok(nrfx_twim_t* twi_instance, uint8_t address);
 
 
 #endif // _LIBHALGUE_NRFX_I2C_
