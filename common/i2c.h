@@ -29,9 +29,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef int32_t (*i2c_send_f)(void* drv_specific, uint8_t address, uint8_t * p_data, uint8_t length, bool no_ack);
-typedef int32_t (*i2c_recv_f)(void* drv_specific, uint8_t address, uint8_t * p_data, uint8_t length);
-typedef int32_t (*i2c_isok_f)(void* drv_specific, uint8_t address);
+typedef int (*i2c_send_f)(void* drv_specific, uint8_t address, uint8_t * p_data, uint8_t length, bool no_ack);
+typedef int (*i2c_recv_f)(void* drv_specific, uint8_t address, uint8_t * p_data, uint8_t length);
+typedef int (*i2c_isok_f)(void* drv_specific, uint8_t address);
 
 #define LIBGLUE_I2C_STATUS_OK            0
 #define LIBGLUE_I2C_STATUS_BAD_PARAM    -1
