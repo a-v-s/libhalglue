@@ -1,6 +1,8 @@
 #ifndef __MCU_H__
 #define __MCU_H__
 
+#include <stdint.h>
+
 #if defined (STM32F030x6) || defined (STM32F030x8) ||                           \
     defined (STM32F031x6) || defined (STM32F038xx) ||                           \
     defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
