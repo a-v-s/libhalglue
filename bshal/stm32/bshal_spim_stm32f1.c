@@ -74,17 +74,17 @@ int bshal_spim_config(bshal_spim_t *config) {
 	handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
 	if (clk_div <= 128)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
-	else if (clk_div <= 64)
+	if (clk_div <= 64)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
-	else if (clk_div <= 32)
+	if (clk_div <= 32)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-	else if (clk_div <= 16)
+	if (clk_div <= 16)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
-	else if (clk_div <= 8)
+	if (clk_div <= 8)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-	else if (clk_div <= 4)
+	if (clk_div <= 4)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
-	else if (clk_div <= 2)
+	if (clk_div <= 2)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
 
 	switch (config->mode) {
@@ -93,10 +93,12 @@ int bshal_spim_config(bshal_spim_t *config) {
 		handle->Init.CLKPhase = SPI_PHASE_1EDGE;
 		break;
 	case 1:
-		// TODO
+		handle->Init.CLKPolarity = SPI_POLARITY_LOW;
+		handle->Init.CLKPhase = SPI_PHASE_2EDGE;
 		break;
 	case 2:
-		// TODO
+		handle->Init.CLKPolarity = SPI_POLARITY_LOW;
+				handle->Init.CLKPhase = SPI_PHASE_2EDGE;
 		break;
 	case 3:
 		handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
