@@ -149,3 +149,88 @@ void bshal_gpio_write_pin(uint8_t bs_pin, bool val) {
 	if (port)
 		HAL_GPIO_WritePin(port, pin, val);
 }
+
+void bshal_gpio_port_enable_clock(uint8_t bs_pin) {
+
+	GPIO_TypeDef *port;
+	uint16_t pin;
+	bshal_gpio_decode_pin(bs_pin, &port, &pin);
+	switch ( (int)(port)) {
+#ifdef GPIOA
+	case (int)GPIOA:
+			__HAL_RCC_GPIOA_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOB
+	case (int)GPIOB:
+			__HAL_RCC_GPIOB_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOC
+	case (int)GPIOC:
+			__HAL_RCC_GPIOC_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOD
+	case (int)GPIOD:
+			__HAL_RCC_GPIOD_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOE
+	case (int)GPIOE:
+			__HAL_RCC_GPIOE_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOF
+	case (int)GPIOF:
+			__HAL_RCC_GPIOF_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOG
+	case (int)GPIOG:
+			__HAL_RCC_GPIOG_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOH
+	case (int)GPIOH:
+			__HAL_RCC_GPIOH_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOI
+	case (int)GPIOI:
+			__HAL_RCC_GPIOI_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOJ
+	case (int)GPIOJ:
+			__HAL_RCC_GPIOJ_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOK
+	case (int)GPIOK:
+			__HAL_RCC_GPIOK_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOL
+	case (int)GPIOL:
+			__HAL_RCC_GPIOL_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOM
+	case (int)GPIOM:
+			__HAL_RCC_GPIOM_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPION
+	case (int)GPION:
+			__HAL_RCC_GPION_CLK_ENABLE();
+			break;
+#endif
+#ifdef GPIOO
+	case (int)GPIOO:
+			__HAL_RCC_GPIOO_CLK_ENABLE();
+			break;
+
+#endif
+	}
+}

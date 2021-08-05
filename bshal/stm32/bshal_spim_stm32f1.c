@@ -169,10 +169,6 @@ int bshal_spim_init(bshal_spim_t *config) {
 			HAL_GPIO_Init(port, &GPIO_InitStruct);
 		}
 	bshal_gpio_write_pin(config->nrs_pin, true);
-
-
-
-
 }
 
 int bshal_spim_transceive(bshal_spim_t *bshal_spim, void *data, size_t size) {

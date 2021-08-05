@@ -37,7 +37,7 @@ int32_t halgue_nrfx_i2c_recover(int scl_pin) {
 	}
 }
 
-int32_t halgue_nrfx_i2c_init(nrfx_twi_t* twi_instance, int scl_pin, int sda_pin, i2c_instance_t *i2c_instance){
+int32_t halgue_nrfx_i2c_init(nrfx_twi_t* twi_instance, int scl_pin, int sda_pin, bshal_i2cm_instance_t *i2c_instance){
 	if (!twi_instance) return -1;
 	nrfx_twi_uninit(twi_instance);
 	halgue_nrfx_i2c_recover(scl_pin);
