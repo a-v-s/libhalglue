@@ -2,7 +2,8 @@
  File:		arm_cpuid.h
  License: 	MIT
 
- Copyright (c) 2020 André van Schoubroeck
+ Copyright (c) 2020, 2021
+ 	 	 	 	 	 	 	 André van Schoubroeck <andre@blaatschaap.be>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +41,8 @@ typedef struct {
 	uint32_t end;
 	// ... ///
 } cortex_m_romtable_t;
+
+#define CORTEX_M_ROMTABLE ((cortex_m_romtable_t*)(0xE00FF000))
 
 typedef struct {
 	uint32_t pid4;
