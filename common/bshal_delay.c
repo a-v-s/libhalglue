@@ -46,18 +46,29 @@
 
 // Should probably a ramfuncion
 void delay_cycles_asm(uint32_t time_cycles) {
-#ifdef __ARMEL__
+#if (__ARM_ARCH_ISA_THUMB == 2)
 	static uint32_t cycles_per_loop = 3;
 	asm("loop:" );
 	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	// 1 cycle
 	asm("bhi loop"); 								// 2 cycles
-#else
+#elif (__ARM_ARCH_ISA_THUMB == 1)
+	// TODO VERIFY THIS 
+	// THis sub in stead of subs would be wrong (not updating the flags? or?)
+	// On an M3, using sub in stead of subs make loop only once rather then
+	// counting down
+	static uint32_t cycles_per_loop = 3;
+	asm("loop:" );
+	asm("sub  r0, %0" :: "r" (cycles_per_loop) ); 	
+	asm("bhi loop");
+#else 				
 #error "CPU Architecture Not Supported"
 #endif
 }
 
 delay_fn bshal_delay_cycles = delay_cycles_asm;
 
+
+#if ( __ARM_ARCH >= 7 ) && ( __ARM_ARCH_PROFILE == 'M' )
 static void delay_cycles_dwt(uint32_t time_cycles) {
 	// Based upon nrfx_coredep.h from nrfx by Nordic:
 
@@ -82,6 +93,8 @@ static void delay_cycles_dwt(uint32_t time_cycles) {
 	DWT->CTRL = dwt_ctrl;
 	CoreDebug->DEMCR = core_debug;
 }
+#endif
+
 
 void bshal_delay_us(uint32_t delay_us) {
 	bshal_delay_cycles(delay_us * (SystemCoreClock / 1000000));
@@ -93,7 +106,7 @@ void bshal_delay_ms(uint32_t delay_ms) {
 
 int bshal_delay_init(void) {
 	// Check whether our current core supports DWT
-#ifdef __ARMEL__
+#if ( __ARM_ARCH >= 7 ) && ( __ARM_ARCH_PROFILE == 'M' )
 
 	// ATMv7-M Architecture Reference Manual
 	// page 742 Table C1-2
