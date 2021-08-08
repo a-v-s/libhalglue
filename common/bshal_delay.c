@@ -40,25 +40,25 @@
 #include "bshal_delay.h"
 #include "system.h"
 
-#ifdef __ARMEL__
+#ifdef __arm__
 #include "arm_cpuid.h"
 #endif
 
 // Should probably a ramfuncion
 void delay_cycles_asm(uint32_t time_cycles) {
-#if (__ARM_ARCH_ISA_THUMB == 2)
+#if (defined __thumb2__)
 	static uint32_t cycles_per_loop = 3;
 	asm("loop:" );
 	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	// 1 cycle
 	asm("bhi loop"); 								// 2 cycles
-#elif (__ARM_ARCH_ISA_THUMB == 1)
+#elif (__thumb__)
 	// TODO VERIFY THIS 
 	// THis sub in stead of subs would be wrong (not updating the flags? or?)
 	// On an M3, using sub in stead of subs make loop only once rather then
 	// counting down
 	static uint32_t cycles_per_loop = 3;
 	asm("loop:" );
-	asm("sub  r0, %0" :: "r" (cycles_per_loop) ); 	
+	asm("sub  r0, %0" :: "l" (cycles_per_loop) ); 	
 	asm("bhi loop");
 #else 				
 #error "CPU Architecture Not Supported"
