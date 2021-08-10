@@ -179,9 +179,9 @@ int bshal_spim_transceive(bshal_spim_t *bshal_spim, void *data, size_t size) {
 }
 
 int bshal_spim_transmit(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
-	bshal_gpio_write_pin(bshal_spim->nss_pin, false);
+	//bshal_gpio_write_pin(bshal_spim->nss_pin, false);
 	int result = HAL_SPI_Transmit(bshal_spim->drv_specific, data,  size, 1000);
-	if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
+	//if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
 	return result;
 }
 int bshal_spim_recveive(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
