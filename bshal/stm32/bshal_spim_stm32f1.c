@@ -118,7 +118,8 @@ int bshal_spim_init(bshal_spim_t *config) {
 
 	GPIO_InitTypeDef GPIO_InitStruct;
 	// Common configuration for all channels
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	//GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_TypeDef *port = NULL;
 	uint16_t pin = -1;
@@ -171,10 +172,10 @@ int bshal_spim_init(bshal_spim_t *config) {
 	bshal_gpio_write_pin(config->nrs_pin, true);
 }
 
-int bshal_spim_transceive(bshal_spim_t *bshal_spim, void *data, size_t size) {
+int bshal_spim_transceive(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
 	bshal_gpio_write_pin(bshal_spim->nss_pin, false);
 	int result = HAL_SPI_TransmitReceive(bshal_spim->drv_specific, data, data, size, 1000);
-	bshal_gpio_write_pin(bshal_spim->nss_pin, true);
+	if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
 	return result;
 }
 
