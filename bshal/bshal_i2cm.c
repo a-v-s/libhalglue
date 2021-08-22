@@ -72,7 +72,7 @@ int bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, ui
 
 int bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
     int result;
-    result = i2c_send(i2c_instance, address, &reg, 1, true);
+    result = bshal_i2cm_send(i2c_instance, address, &reg, 1, true);
     if (result) return result;
     return bshal_i2cm_recv(i2c_instance, address, p_data, length, false);
 }
