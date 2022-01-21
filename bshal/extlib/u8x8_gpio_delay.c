@@ -31,10 +31,10 @@ uint8_t bshal_u8x8_gpio_and_delay(u8x8_t *u8x8, uint8_t msg,
 								// arg_int=1: delay by 5us, arg_int = 4: delay by 1.25us
 		break;
 	case U8X8_MSG_GPIO_D0:		// D0 or SPI clock pin: Output level in arg_int
-		//case U8X8_MSG_GPIO_SPI_CLOCK:
+	//case U8X8_MSG_GPIO_SPI_CLOCK:
 		break;
 	case U8X8_MSG_GPIO_D1:		// D1 or SPI data pin: Output level in arg_int
-		//case U8X8_MSG_GPIO_SPI_DATA:
+	//case U8X8_MSG_GPIO_SPI_DATA:
 		break;
 	case U8X8_MSG_GPIO_D2:				// D2 pin: Output level in arg_int
 		break;

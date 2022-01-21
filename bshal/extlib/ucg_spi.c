@@ -13,11 +13,11 @@
 #include "bshal_delay.h"
 
 
-static bshal_spim_t *m_bsspim;
-
-void ucg_com_bshal_set_config(bshal_spim_t *bsspim) {
-	m_bsspim = bsspim;
-}
+//static bshal_spim_t *m_bsspim;
+//
+//void ucg_com_bshal_set_config(bshal_spim_t *bsspim) {
+//	m_bsspim = bsspim;
+//}
 
 int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 

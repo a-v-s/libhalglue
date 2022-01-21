@@ -2,19 +2,18 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-
 #include "hal.h"
 #include "bshal_spim.h"
 #include "bshal_gpio_stm32.h"
 
+
+
 static SPI_HandleTypeDef m_spim[4];
 
-int bshal_spim_config(bshal_spim_t *config) {
+int bshal_spim_config(bshal_spim_instance_t *config) {
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOA_CLK_ENABLE();
-
-
 
 	// PCLK1 to APB1 Peripherals (page 93)
 	// PCLK2 to APB2 Peripherals (page 93)
@@ -71,6 +70,8 @@ int bshal_spim_config(bshal_spim_t *config) {
 	if (clk_mod)
 		clk_div++;
 
+
+
 	handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
 	if (clk_div <= 128)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
@@ -87,6 +88,7 @@ int bshal_spim_config(bshal_spim_t *config) {
 	if (clk_div <= 2)
 		handle->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
 
+
 	switch (config->mode) {
 	case 0:
 		handle->Init.CLKPolarity = SPI_POLARITY_LOW;
@@ -98,7 +100,7 @@ int bshal_spim_config(bshal_spim_t *config) {
 		break;
 	case 2:
 		handle->Init.CLKPolarity = SPI_POLARITY_LOW;
-				handle->Init.CLKPhase = SPI_PHASE_2EDGE;
+		handle->Init.CLKPhase = SPI_PHASE_2EDGE;
 		break;
 	case 3:
 		handle->Init.CLKPolarity = SPI_POLARITY_HIGH;
@@ -111,7 +113,7 @@ int bshal_spim_config(bshal_spim_t *config) {
 	return HAL_SPI_Init(handle);
 }
 
-int bshal_spim_init(bshal_spim_t *config) {
+int bshal_spim_init(bshal_spim_instance_t *config) {
 	int result = bshal_spim_config(config);
 	if (result)
 		return result;
@@ -124,71 +126,92 @@ int bshal_spim_init(bshal_spim_t *config) {
 	GPIO_TypeDef *port = NULL;
 	uint16_t pin = -1;
 
-	bshal_gpio_decode_pin(config->mosi_pin, &port, &pin);
-	if (!port)
-		return -1;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pin = pin;
-	HAL_GPIO_Init(port, &GPIO_InitStruct);
+	bool at_least_miso_or_mosi = false;
 
-	bshal_gpio_decode_pin(config->sck_pin, &port, &pin);
-	if (!port)
-		return -1;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pin = pin;
-	HAL_GPIO_Init(port, &GPIO_InitStruct);
+	bshal_gpio_decode_pin(config->mosi_pin, &port, &pin);
+	if (port) {
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pin = pin;
+		HAL_GPIO_Init(port, &GPIO_InitStruct);
+		at_least_miso_or_mosi = true;
+	}
 
 	bshal_gpio_decode_pin(config->miso_pin, &port, &pin);
 	if (port) {
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_INPUT;
 		GPIO_InitStruct.Pin = pin;
 		HAL_GPIO_Init(port, &GPIO_InitStruct);
+		at_least_miso_or_mosi = true;
 	}
 
-	// nss, ncd as output
-	// irq as input (or as pin interrupt)
-	bshal_gpio_decode_pin(config->nss_pin, &port, &pin);
-	if (port) {
-			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-			GPIO_InitStruct.Pin = pin;
-			HAL_GPIO_Init(port, &GPIO_InitStruct);
-		}
-	bshal_gpio_write_pin(config->nss_pin, true);
+	if (!at_least_miso_or_mosi) {
+		return -1;
+	}
 
-	bshal_gpio_decode_pin(config->ncd_pin, &port, &pin);
+	bshal_gpio_decode_pin(config->sck_pin, &port, &pin);
 	if (port) {
-			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-			GPIO_InitStruct.Pin = pin;
-			HAL_GPIO_Init(port, &GPIO_InitStruct);
-		}
-	bshal_gpio_write_pin(config->ncd_pin, true);
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pin = pin;
+		HAL_GPIO_Init(port, &GPIO_InitStruct);
+	} else {
+		return -1;
+	}
 
-	bshal_gpio_decode_pin(config->nrs_pin, &port, &pin);
+	bshal_gpio_decode_pin(config->cs_pin, &port, &pin);
 	if (port) {
-			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-			GPIO_InitStruct.Pin = pin;
-			HAL_GPIO_Init(port, &GPIO_InitStruct);
-		}
-	bshal_gpio_write_pin(config->nrs_pin, true);
+		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_InitStruct.Pin = pin;
+		HAL_GPIO_Init(port, &GPIO_InitStruct);
+		bshal_gpio_write_pin(config->cs_pin, !config->cs_pol);
+	}
+
+	bshal_gpio_decode_pin(config->rs_pin, &port, &pin);
+	if (port) {
+		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_InitStruct.Pin = pin;
+		HAL_GPIO_Init(port, &GPIO_InitStruct);
+		bshal_gpio_write_pin(config->rs_pin, !config->rs_pol);
+	}
+
+	return 0;
 }
 
-int bshal_spim_transceive(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
-	bshal_gpio_write_pin(bshal_spim->nss_pin, false);
-	int result = HAL_SPI_TransmitReceive(bshal_spim->drv_specific, data, data, size, 1000);
-	if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
+int bshal_spim_instance_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+		bool nostop) {
+	int result = bshal_spim_config(bshal_spim);
+	if (result)
+		return result;
+
+	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	result = HAL_SPI_TransmitReceive(bshal_spim->drv_specific, data, data,
+			size, 1000);
+	if (!nostop)
+			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
 	return result;
 }
 
-int bshal_spim_transmit(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
-	bshal_gpio_write_pin(bshal_spim->nss_pin, false);
-	int result = HAL_SPI_Transmit(bshal_spim->drv_specific, data,  size, 1000);
-	if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
+int bshal_spim_instance_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+		bool nostop) {
+	int result = bshal_spim_config(bshal_spim);
+	if (result)
+		return result;
+
+	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	result = HAL_SPI_Transmit(bshal_spim->drv_specific, data, size, 1000);
+	if (!nostop)
+		bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
 	return result;
 }
-int bshal_spim_receive(bshal_spim_t *bshal_spim, void *data, size_t size, bool nostop) {
-	bshal_gpio_write_pin(bshal_spim->nss_pin, false);
-	int result = HAL_SPI_Receive(bshal_spim->drv_specific,  data, size, 1000);
-	if (!nostop) bshal_gpio_write_pin(bshal_spim->nss_pin, true);
+int bshal_spim_receive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+		bool nostop) {
+	int result = bshal_spim_config(bshal_spim);
+	if (result)
+		return result;
+
+	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	result = HAL_SPI_Receive(bshal_spim->drv_specific, data, size, 1000);
+	if (!nostop)
+		bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
 	return result;
 }
 
