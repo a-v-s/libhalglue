@@ -31,7 +31,7 @@ typedef struct i2c_instance_t{
 	i2cm_isok_f i2cm_isok;
 	uint8_t sda_pin;
 	uint8_t scl_pin;
-	uint8_t				  hw_nr; 	       ///< Hardware number
+	uint8_t hw_nr; 	       ///< Hardware number
 } bshal_i2cm_instance_t;
 
 int bshal_i2cm_send(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop);
