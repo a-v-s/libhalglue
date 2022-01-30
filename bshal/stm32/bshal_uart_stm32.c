@@ -144,3 +144,7 @@ void USART2_IRQHandler(void) {
 void USART3_IRQHandler(void) {
   HAL_UART_IRQHandler(&m_uart[2]);
 }
+
+void test_uart_send(char* str, size_t len) {
+	HAL_UART_Transmit(__hacky_uart_instance->drv_specific, str, len, 1000);
+}

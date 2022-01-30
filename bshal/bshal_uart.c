@@ -18,12 +18,14 @@ void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
 	static int sync_begin_cnt = 0 ;
 	static int sync_end_pos = 0 ;
 	static int sync_end_cnt = 0 ;
-	static int recv_buff_pos = 0;
+	//static int recv_buff_pos = 0;
 	static int proc_buff_pos = 0;
+
+	int recv_buff_pos = 0;
 
 	if (size <= 0) return;
 
-	if (recv_buff_pos >= info->receive_buffer_len) {
+	if (proc_buff_pos >= info->process_buffer_len) {
 		// INVALID
 		synced = false;
 		sync_begin_pos = 0 ;
@@ -33,6 +35,8 @@ void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
 		recv_buff_pos = 0;
 		proc_buff_pos = 0;
 	}
+
+	recv_buff_pos = 0;
 
 	while (recv_buff_pos <= size)
 
