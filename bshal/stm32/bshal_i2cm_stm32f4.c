@@ -15,7 +15,7 @@
 #include "bshal_gpio_stm32.h"
 #include "bshal_i2cm_stm32.h"
 
-static I2C_HandleTypeDef m_i2c_handles[2];
+static I2C_HandleTypeDef m_i2c_handles[3];
 
 
 int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
@@ -23,24 +23,32 @@ int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 	i2c_instance->i2cm_recv = bshal_stm32_i2cm_recv;
 	i2c_instance->i2cm_send = bshal_stm32_i2cm_send;
 
+
+
+
 	GPIO_InitTypeDef GPIO_InitStruct;
 	// Common configuration for all channels
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+	GPIO_InitStruct.Alternate = 0x04; // 0x04 for all I2C instances
+
+
 	GPIO_TypeDef *port = NULL;
 	uint16_t pin = -1;
 
 	bshal_gpio_port_enable_clock(i2c_instance->scl_pin);
 	bshal_gpio_decode_pin(i2c_instance->scl_pin, &port, &pin);
 	GPIO_InitStruct.Pin = pin;
-
 	HAL_GPIO_Init(port, &GPIO_InitStruct);
 
 	bshal_gpio_port_enable_clock(i2c_instance->sda_pin);
 	bshal_gpio_decode_pin(i2c_instance->sda_pin, &port, &pin);
 	GPIO_InitStruct.Pin = pin;
 	HAL_GPIO_Init(port, &GPIO_InitStruct);
+
+
+
 
 	I2C_HandleTypeDef *handle;
 	switch (i2c_instance->hw_nr) {
@@ -60,12 +68,20 @@ int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 		handle->Instance = I2C2;
 		break;
 #endif
+#ifdef I2C3
+	case 3:
+		__HAL_RCC_I2C3_CLK_ENABLE();
+		handle = m_i2c_handles+1;
+		memset(handle, 0, sizeof(I2C_HandleTypeDef));
+		handle->Instance = I2C3;
+		break;
+#endif
 	default:
 		return -1;
 	}
 
 	handle->Init.ClockSpeed = 400000;
-	handle->Init.DutyCycle = I2C_DUTYCYCLE_2;
+	handle->Init.DutyCycle = I2C_DUTYCYCLE_16_9;
 	handle->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 
 	i2c_instance->drv_specific = handle;

@@ -129,7 +129,9 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	bool at_least_miso_or_mosi = false;
 
 	bshal_gpio_decode_pin(config->mosi_pin, &port, &pin);
+	bshal_gpio_port_enable_clock(config->mosi_pin);
 	if (port) {
+
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pin = pin;
 		HAL_GPIO_Init(port, &GPIO_InitStruct);
@@ -137,6 +139,7 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	}
 
 	bshal_gpio_decode_pin(config->miso_pin, &port, &pin);
+	bshal_gpio_port_enable_clock(config->miso_pin);
 	if (port) {
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_INPUT;
 		GPIO_InitStruct.Pin = pin;
@@ -149,6 +152,7 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	}
 
 	bshal_gpio_decode_pin(config->sck_pin, &port, &pin);
+	bshal_gpio_port_enable_clock(config->sck_pin);
 	if (port) {
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pin = pin;
@@ -158,6 +162,7 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	}
 
 	bshal_gpio_decode_pin(config->cs_pin, &port, &pin);
+	bshal_gpio_port_enable_clock(config->cs_pin);
 	if (port) {
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 		GPIO_InitStruct.Pin = pin;
@@ -166,6 +171,7 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	}
 
 	bshal_gpio_decode_pin(config->rs_pin, &port, &pin);
+	bshal_gpio_port_enable_clock(config->rs_pin);
 	if (port) {
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 		GPIO_InitStruct.Pin = pin;
@@ -176,7 +182,7 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 	return 0;
 }
 
-int bshal_spim_instance_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
 	int result = bshal_spim_config(bshal_spim);
 	if (result)
@@ -190,16 +196,26 @@ int bshal_spim_instance_transceive(bshal_spim_instance_t *bshal_spim, void *data
 	return result;
 }
 
-int bshal_spim_instance_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
 	int result = bshal_spim_config(bshal_spim);
 	if (result)
 		return result;
 
 	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+
+	//--test
+	bshal_delay_us(1);
+	//--test
+
 	result = HAL_SPI_Transmit(bshal_spim->drv_specific, data, size, 1000);
 	if (!nostop)
 		bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+
+	//--test
+		bshal_delay_us(1);
+	//--test
+
 	return result;
 }
 int bshal_spim_receive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,

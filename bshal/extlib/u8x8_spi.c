@@ -8,9 +8,9 @@
 
 #ifndef U8X8_WITH_USER_PTR
 #warning please use U8X8_WITH_USER_PTR
-static bshal_spim_t *mp_spim;
+static bshal_spim_instance_t *mp_spim;
 static u8g2_t *mp_u8g2;
-void bshal_u8x8_spi_init(u8g2_t *p_u8g2, bshal_spim_t *p_spim) {
+void bshal_u8x8_spi_init(u8g2_t *p_u8g2, bshal_spim_instance_t *p_spim) {
 	mp_u8g2 = p_u8g2;
 	mp_spim = p_spim;
 }
@@ -43,7 +43,7 @@ uint8_t bshal_u8x8_byte_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
       break;
     case U8X8_MSG_BYTE_INIT:
     	p_if->spim.instance.frequency = u8x8->display_info->sck_clock_hz;
-		p_if->spim.instance.bit_order = 0; //MSB
+		p_if->spim.instance.bit_order = 0; // 0 = MSB
 		p_if->spim.instance.mode = u8x8->display_info->spi_mode;
 		p_if->spim.instance.cs_pol = u8x8->display_info->chip_enable_level;
 		bshal_spim_init(&p_if->spim.instance);

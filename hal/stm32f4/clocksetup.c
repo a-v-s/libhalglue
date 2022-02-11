@@ -2,7 +2,7 @@
 
 // HSE using 25 MHz XTAL
 // SYS running at 84 MHZ
-void SystemClock_HSE25_OUT84_Config(void) {
+void SystemClock_HSE25_SYS84(void) {
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 	__HAL_RCC_PWR_CLK_ENABLE();
@@ -26,7 +26,7 @@ void SystemClock_HSE25_OUT84_Config(void) {
 	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
 	RCC_OscInitStruct.PLL.PLLQ = 7;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		Error_Handler();
+		//!!Error_Handler();
 	}
 
 	// See STM32F401 Reference Manual (RM0368) Page 95
@@ -41,7 +41,7 @@ void SystemClock_HSE25_OUT84_Config(void) {
 	// Running at 84 Mhz at 3.3 volt gives us 2 Wait States
 	// Be aware running at lower voltages required more wait states!
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		Error_Handler();
+		//!!Error_Handler();
 	}
 
 	// Enable the Clock Security System. Please note when using external clock source
@@ -51,7 +51,7 @@ void SystemClock_HSE25_OUT84_Config(void) {
 
 // HSI (running at 16 MHz)
 // SYS running at 84 MHZ
-void SystemClock_HSI_OUT84_Config(void) {
+void SystemClock_HSI_SYS84(void) {
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 	__HAL_RCC_PWR_CLK_ENABLE();
@@ -76,7 +76,7 @@ void SystemClock_HSI_OUT84_Config(void) {
 	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
 	RCC_OscInitStruct.PLL.PLLQ = 7;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// See STM32F401 Reference Manual (RM0368) Page 95
@@ -91,7 +91,7 @@ void SystemClock_HSI_OUT84_Config(void) {
 	// Running at 84 Mhz at 3.3 volt gives us 2 Wait States
 	// Be aware running at lower voltages required more wait states!
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// Enable the Clock Security System. Not sure if this is effective on HSI though.
@@ -100,7 +100,7 @@ void SystemClock_HSI_OUT84_Config(void) {
 
 
 
-void SystemClock_HSE25_OUT96_Config(void) {
+void SystemClock_HSE25_SYS96(void) {
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 	__HAL_RCC_PWR_CLK_ENABLE();
@@ -121,7 +121,7 @@ void SystemClock_HSE25_OUT96_Config(void) {
 	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
 	RCC_OscInitStruct.PLL.PLLQ = 7;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// See STM32F401 Reference Manual (RM0368) Page 95
@@ -136,7 +136,7 @@ void SystemClock_HSE25_OUT96_Config(void) {
 	// Running at 84 Mhz at 3.3 volt gives us 2 Wait States
 	// Be aware running at lower voltages required more wait states!
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// Enable the Clock Security System. Please note when using external clock source
@@ -146,7 +146,7 @@ void SystemClock_HSE25_OUT96_Config(void) {
 
 // HSI (running at 16 MHz)
 
-void SystemClock_HSI_OUT96_Config(void) {
+void SystemClock_HSI_SYS96(void) {
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 	__HAL_RCC_PWR_CLK_ENABLE();
@@ -168,7 +168,7 @@ void SystemClock_HSI_OUT96_Config(void) {
 	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
 	RCC_OscInitStruct.PLL.PLLQ = 7;
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// See STM32F401 Reference Manual (RM0368) Page 95
@@ -183,7 +183,7 @@ void SystemClock_HSI_OUT96_Config(void) {
 	// Running at 84 Mhz at 3.3 volt gives us 2 Wait States
 	// Be aware running at lower voltages required more wait states!
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		Error_Handler();
+		//Error_Handler();
 	}
 
 	// Enable the Clock Security System. Not sure if this is effective on HSI though.

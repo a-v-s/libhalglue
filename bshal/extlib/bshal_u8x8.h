@@ -16,7 +16,7 @@
 
 
 typedef struct {
-	bshal_spim_t	instance;		///< SPI MASTER INSTANCE
+	bshal_spim_instance_t	instance;		///< SPI MASTER INSTANCE
 	uint8_t			ncd_pin;		///< D/CX pin number (optional).
 
 	// Should we have reset and chip select here as well
