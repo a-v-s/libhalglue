@@ -31,7 +31,7 @@ int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Alternate = 0x01; // 0x01 for all I2C instances
+	GPIO_InitStruct.Alternate = 0x04; // 0x04 for all I2C instances
 
 
 	GPIO_TypeDef *port = NULL;
@@ -68,24 +68,20 @@ int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 		handle->Instance = I2C2;
 		break;
 #endif
-
 	default:
 		return -1;
 	}
 
-
-	// The F0 HAL does not appear to offer a clock speed/duty cycle setting
+	// The F3 HAL does not appear to offer a clock speed/duty cycle setting
 	// In stead it has a Timing setting, Copying the value from the example
-	// TODO: How to calculate this value given a speed?
 	// Do other Cubes which take the speed calculate it, can we copy the code?
 	//handle->Init.ClockSpeed = 400000;
 	//handle->Init.DutyCycle = I2C_DUTYCYCLE_16_9;
 
 	/* I2C TIMING Register define when I2C clock source is SYSCLK */
-	/* I2C TIMING is calculated in case of the I2C Clock source is the SYSCLK = 48 MHz */
-	/* This example use TIMING to 0x00A51314 to reach 1 MHz speed (Rise time = 100 ns, Fall time = 100 ns) */
-	handle->Init.Timing = 0x00A51314;
-
+	/* I2C TIMING is calculated in case of the I2C Clock source is the SYSCLK = 72 MHz */
+	/* This example use TIMING to 0x00C4092A to reach 1 MHz speed (Rise time = 26ns, Fall time = 2ns) */
+	handle->Init.Timing = 0x00C4092A;
 	handle->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 
 	i2c_instance->drv_specific = handle;
