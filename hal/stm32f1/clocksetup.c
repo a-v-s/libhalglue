@@ -7,7 +7,7 @@
 
  MIT License
 
- Copyright (c) 2020 André van Schoubroeck
+ Copyright (c) 2020, 2022 		André van Schoubroeck <andre@blaatschaap.be>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@
  SOFTWARE.
 
  */
+
 //----------------------------------------------------------------------------
 // Clock Setup for STM32F1xxx
 //
@@ -35,8 +36,7 @@
 // ClockSetup_HSI_SYS48  : No Xtal, 48 MHz clock speed, unofficial USB capable
 //------------------------------------------------------------------------------
 #include "stm32f1xx.h"
-//#include "stm32f1xx_hal_rcc.h"
-//#include "stm32f1xx_hal_rcc_ex.h"
+
 
 // Configure for external HSE 8 Mhz Xtal, System speed to 72 MHz
 void ClockSetup_HSE8_SYS72(void) {
