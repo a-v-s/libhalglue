@@ -75,6 +75,7 @@ uint8_t bshal_gpio_encode_pin(GPIO_TypeDef *port, uint16_t pin) {
 	if (port == GPIOO)
 	return result | ( 14 << 4);
 #endif
+	return -1;
 }
 
 void bshal_gpio_decode_pin(uint8_t bs_pin, GPIO_TypeDef **port, uint16_t *pin) {

@@ -204,17 +204,9 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t si
 
 	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 
-	//--test
-	bshal_delay_us(1);
-	//--test
-
 	result = HAL_SPI_Transmit(bshal_spim->drv_specific, data, size, 1000);
 	if (!nostop)
 		bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
-
-	//--test
-		bshal_delay_us(1);
-	//--test
 
 	return result;
 }
