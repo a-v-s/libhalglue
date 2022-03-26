@@ -11,12 +11,12 @@
 
 #include "bshal_spim.h"
 #include "bshal_delay.h"
+#include <string.h>
 
-
-//static bshal_spim_t *m_bsspim;
+//static bshal_spim_t *&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance;
 //
 //void ucg_com_bshal_set_config(bshal_spim_t *bsspim) {
-//	m_bsspim = bsspim;
+//	&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance = bsspim;
 //}
 
 int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
@@ -55,7 +55,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		/* "arg" = 0: set the reset output line to 0 */
 
 		//HAL_GPIO_WritePin(GPIOA, RESET_PIN,arg);
-		bshal_gpio_write_pin(m_bsspim->nrs_pin, arg);
+
+		bshal_gpio_write_pin(((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance.rs_pin , arg);
 
 		break;
 		case UCG_COM_MSG_CHANGE_CD_LINE:
@@ -64,7 +65,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 			/* "arg" = 1: set the command/data (a0) output line to 1 */
 			/* "arg" = 0: set the command/data (a0) output line to 0 */
 
-			bshal_gpio_write_pin(m_bsspim->ncd_pin, arg);
+			bshal_gpio_write_pin(((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.ncd_pin, arg);
 
 			break;
 			case UCG_COM_MSG_CHANGE_CS_LINE:
@@ -73,7 +74,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 				/* "arg" = 1: set the chipselect output line to 1 */
 				/* "arg" = 0: set the chipselect output line to 0 */
 
-				bshal_gpio_write_pin(m_bsspim->nss_pin, arg);
+				bshal_gpio_write_pin(((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance.cs_pin, arg);
 				break;
 				case UCG_COM_MSG_SEND_BYTE:
 					/* "data" is not used */
@@ -81,7 +82,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 					/* The current status of the CD line is available */
 					/* in bit 0 of u8g->com_status */
 				{
-					int res = bshal_spim_transmit(m_bsspim, &arg, 1, true);
+					int res = bshal_spim_transmit(&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance, &arg, 1, true);
 					if (res) __BKPT(0);
 				}
 					break;
@@ -95,7 +96,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 				{
 					uint8_t buff[arg+1];
 					memset(buff, data[0], arg);
-					int res= bshal_spim_transmit(m_bsspim,buff, arg, true);
+					int res= bshal_spim_transmit(&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance,buff, arg, true);
 					if (res) __BKPT(0);
 				}
 
@@ -118,7 +119,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 						buff[2 * i + 1] = data[1];
 					}
 
-					int res= bshal_spim_transmit(m_bsspim,buff, 2 * arg, true);
+					int res= bshal_spim_transmit(&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance,buff, 2 * arg, true);
 					if (res) __BKPT(0);
 				}
 
@@ -132,6 +133,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 					/* in bit 0 of u8g->com_status */
 					//if (!arg) arg=1;//break; // we can get a request for zero times ?!?!?
 					arg++;
+
+					if (arg < 1) break;
 				{
 					uint8_t buff[3 * arg];
 					for (int i = 0; i < arg; i++) {
@@ -140,7 +143,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 						buff[3 * i + 2] = data[2];
 					}
 
-					int res= bshal_spim_transmit(m_bsspim, buff, 3 * arg, true);
+					int res= bshal_spim_transmit(&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance, buff, 3 * arg, true);
 					if (res) __BKPT(0);
 				}
 
@@ -149,7 +152,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 					/* "data" is an array with "arg" bytes */
 					/* send "arg" bytes to the display */
 				{
-					int res = bshal_spim_transmit(m_bsspim, data,  arg,	true);
+					int res = bshal_spim_transmit(&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance, data,  arg,	true);
 					if (res) __BKPT(0);
 				}
 				break;
@@ -164,10 +167,10 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 						if (*data != 0) {
 							if (*data == 1) {
 								/* set CD (=D/C=A0) line to low */
-								bshal_gpio_write_pin(m_bsspim->ncd_pin, 0);
+								bshal_gpio_write_pin(((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.ncd_pin, 0);
 							} else {
 								/* set CD (=D/C=A0) line to high */
-								bshal_gpio_write_pin(m_bsspim->ncd_pin, 1);
+								bshal_gpio_write_pin(((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.ncd_pin, 1);
 							}
 						}
 						data++;
@@ -179,3 +182,4 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 	}
 	return 1;
 }
+
