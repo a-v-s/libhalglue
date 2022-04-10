@@ -198,11 +198,22 @@ int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t 
 
 int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
-	int result = bshal_spim_config(bshal_spim);
-	if (result)
-		return result;
 
-	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	int result;
+	static bshal_spim_instance_t *prev = NULL;
+	if (bshal_spim != prev) {
+		if (prev) {
+			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+		}
+		result = bshal_spim_config(bshal_spim);
+		prev = bshal_spim;
+	}
+
+//	int result = bshal_spim_config(bshal_spim);
+//	if (result)
+//		return result;
+//
+//	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 
 	result = HAL_SPI_Transmit(bshal_spim->drv_specific, data, size, 1000);
 	if (!nostop)

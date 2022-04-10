@@ -235,3 +235,22 @@ void bshal_gpio_port_enable_clock(uint8_t bs_pin) {
 #endif
 	}
 }
+
+int bshal_gpio_cfg_out(uint8_t bshal_pin){
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_TypeDef *stm32_port = NULL;
+	uint16_t stm32_pin = -1;
+	bshal_gpio_decode_pin(bshal_pin, &stm32_port, &stm32_pin);
+	bshal_gpio_port_enable_clock(bshal_pin);
+	if (stm32_pin) {
+		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_InitStruct.Pin = stm32_pin;
+		HAL_GPIO_Init(stm32_port, &GPIO_InitStruct);
+		return 0;
+	}
+	return -1;
+}
+
+int bshal_gpio_cfg_int(uint8_t pin){}

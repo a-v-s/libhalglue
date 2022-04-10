@@ -40,6 +40,8 @@ uint8_t bshal_u8x8_byte_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
     	// Keep chip select active, as the disable chip select is a separate
     	// action in the u8g2 library.
 		bshal_spim_transmit	(&p_if->spim.instance, arg_ptr, arg_int, true);
+
+    	//bshal_spim_transmit	(&p_if->spim.instance, arg_ptr, arg_int, false);
       break;
     case U8X8_MSG_BYTE_INIT:
     	p_if->spim.instance.frequency = u8x8->display_info->sck_clock_hz;
@@ -49,17 +51,23 @@ uint8_t bshal_u8x8_byte_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
 		bshal_spim_init(&p_if->spim.instance);
 
 		bshal_gpio_write_pin(p_if->spim.instance.cs_pin, u8x8->display_info->chip_disable_level);
+
+		bshal_gpio_cfg_out(p_if->spim.ncd_pin);
+
       break;
     case U8X8_MSG_BYTE_SET_DC:
 		bshal_gpio_write_pin(p_if->spim.ncd_pin, arg_int);
       break;
     case U8X8_MSG_BYTE_START_TRANSFER:
+    	bshal_spim_config(p_if->spim.instance);
+
 		bshal_gpio_write_pin(p_if->spim.instance.cs_pin, u8x8->display_info->chip_enable_level);
 		u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_ns, NULL);
-      break;
+
+		break;
     case U8X8_MSG_BYTE_END_TRANSFER:      
-		u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_ns, NULL);
 		bshal_gpio_write_pin(p_if->spim.instance.cs_pin, u8x8->display_info->chip_disable_level);
+		u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->pre_chip_disable_wait_ns, NULL);
       break;
     default:
       return 0;
