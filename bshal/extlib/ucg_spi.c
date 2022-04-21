@@ -31,6 +31,11 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		/* This message is sent once at the uC startup and for power up. */
 		/* setup i/o or do any other setup */
 
+
+		bshal_gpio_cfg_out( ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.ncd_pin );
+		bshal_gpio_cfg_out(  ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.instance.rs_pin  );
+
+
 		break;
 
 	case UCG_COM_MSG_POWER_DOWN:
