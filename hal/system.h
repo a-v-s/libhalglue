@@ -107,4 +107,24 @@
 #endif
 
 
+#if defined (NRF52820_XXAA)
+#include "system_nrf52820.h"
+#include "nrf.h"
+#endif
+
+#if defined (NRF52832_XXAA)
+#include "system_nrf52.h"
+#include "nrf.h"
+#endif
+
+#if defined (NRF52833_XXAA)
+#include "system_nrf52833.h"
+#include "nrf.h"
+#endif
+
+#if defined (NRF52840_XXAA)
+#include "system_nrf52840.h"
+#include "nrf.h"
+#endif
+
 #endif // __MCU_H__
