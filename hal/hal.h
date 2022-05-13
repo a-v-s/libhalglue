@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
 #if defined (NRF51) ||\
     defined (NRF51422_XXAA) ||\
     defined (NRF51422_XXAB) ||\
