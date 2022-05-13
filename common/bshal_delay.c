@@ -51,7 +51,7 @@ void delay_cycles_asm(uint32_t time_cycles) {
 	asm("loop:" );
 	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	// 1 cycle
 	asm("bhi loop"); 								// 2 cycles
-#elif (__thumb__)
+#elif (defined __thumb__)
 	// TODO VERIFY THIS 
 	// THis sub in stead of subs would be wrong (not updating the flags? or?)
 	// On an M3, using sub in stead of subs make loop only once rather then
@@ -60,6 +60,8 @@ void delay_cycles_asm(uint32_t time_cycles) {
 	asm("loop:" );
 	asm("sub  r0, %0" :: "l" (cycles_per_loop) ); 	
 	asm("bhi loop");
+#elif (defined __riscv)
+	// TODO
 #else 				
 #error "CPU Architecture Not Supported"
 #endif
