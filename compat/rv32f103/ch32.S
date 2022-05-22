@@ -93,10 +93,9 @@ ch32_vector_base:
 .extern SystemInit_CH32
 _init_ch32:
 
-  li t0, 0x88
-  csrs mstatus, t0
-	la t0, ch32_vector_base
-  ori t0, t0, 1
-	csrw mtvec, t0
-	//call SystemInit_CH32
-	j main
+	la t0, ch32_vector_base   # Load the address of the vector base into register t0
+	ori t0, t0, 1             # t0 |= 1 (set lowest bit = enable vector interrupts)
+	csrw mtvec, t0            # write value t0 to mtvec
+	li t0, 0x08               # load value 0x08 into register t0 
+	csrs mstatus, t0          # write value of t0 into mstatus (mstatus |= MIE, enable interrupts)
+	j main                    # jump to main
