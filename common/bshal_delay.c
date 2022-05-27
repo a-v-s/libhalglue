@@ -58,10 +58,13 @@ void delay_cycles_asm(uint32_t time_cycles) {
 	// counting down
 	static uint32_t cycles_per_loop = 3;
 	asm("loop:" );
-	asm("sub  r0, %0" :: "l" (cycles_per_loop) ); 	
+	asm("sub  r0, %0" :: "l" (cycles_per_loop) );
 	asm("bhi loop");
 #elif (defined __riscv)
-	// TODO
+	uint32_t cycles_per_loop = 3; // TODO
+	asm("loop:");
+	asm("sub  a0, a0, %0" :: "r" (cycles_per_loop) );
+	asm("bgtz a0, loop");
 #else 				
 #error "CPU Architecture Not Supported"
 #endif

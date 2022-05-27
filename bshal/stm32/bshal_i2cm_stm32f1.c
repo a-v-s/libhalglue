@@ -65,10 +65,12 @@ int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 	}
 
 	handle->Init.ClockSpeed = 400000;
-	handle->Init.DutyCycle = I2C_DUTYCYCLE_2;
+	//handle->Init.DutyCycle = I2C_DUTYCYCLE_2;
+	handle->Init.DutyCycle = I2C_DUTYCYCLE_16_9;
 	handle->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 
 	i2c_instance->drv_specific = handle;
 	HAL_I2C_Init(handle);
+	return 0;
 
 }
