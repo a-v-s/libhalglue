@@ -23,7 +23,7 @@ int bshal_stm32_i2cm_recv(void *drv_specific, uint8_t address, void *p_data,
 //		I2C_HandleTypeDef *hi2c = drv_specific;
 //		hi2c->Instance->CR1 |= I2C_CR1_SWRST;
 //		hi2c->Instance->CR1 &= ~I2C_CR1_SWRST;
-		HAL_I2C_Init(drv_specific);
+		// HAL_I2C_Init(drv_specific); // disable for testing
 	}
 	return result;
 }
