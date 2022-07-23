@@ -200,20 +200,24 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t si
 		bool nostop) {
 
 	int result;
-	static bshal_spim_instance_t *prev = NULL;
-	if (bshal_spim != prev) {
-		if (prev) {
-			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
-		}
-		result = bshal_spim_config(bshal_spim);
-		prev = bshal_spim;
-	}
 
-//	int result = bshal_spim_config(bshal_spim);
-//	if (result)
-//		return result;
-//
-//	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	// This was a fix for the display problems with u8g2lib,
+	// but it breaks the rfid lib.
+
+//	static bshal_spim_instance_t *prev = NULL;
+//	if (bshal_spim != prev) {
+//		if (prev) {
+//			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+//		}
+//		result = bshal_spim_config(bshal_spim);
+//		prev = bshal_spim;
+//	}
+
+	result = bshal_spim_config(bshal_spim);
+	if (result)
+		return result;
+
+	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 
 	result = HAL_SPI_Transmit(bshal_spim->drv_specific, data, size, 1000);
 	if (!nostop)
