@@ -1,8 +1,17 @@
 .equ GD32_MARCHID,    0x80000022		# Identifiers for GD32VF103
 .equ GD32_MVENDORID,  0x0000031E		# Identifiers for GD32VF103
 
-.equ CH32_MARCHID,    0x00000000		# Identifiers for CH32V103
-.equ CH32_MVENDORID,  0x01020304		# Identifiers for CH32V103
+.equ CH32V1_MARCHID,    0x00000000		# Identifiers for CH32V103
+.equ CH32V1_MVENDORID,  0x01020304		# Identifiers for CH32V103
+
+
+/*
+	For adding CH32V203 support, however,
+	debugger ain't working properly yet so not sure if
+	these values are correct.
+*/
+.equ CH32V2_MVENDORID,		0x0
+.equ CH32V2_MARCHID,		0xdc68d882
 
 .extern _init_gd32
 .extern _init_ch32
@@ -95,11 +104,18 @@ try_gd32:							# Check if we are runnng on a GD32VF103
 	j	_init_gd32					# GD32VF103 identified,
 
 try_ch32:							# Check if we are runnng on a CH32V103
-	li      a2, CH32_MARCHID
-	bne     a0, a2, chip_not_supported
-	li		a2, CH32_MVENDORID
+	li      a2, CH32V1_MARCHID
+	bne     a0, a2, try_ch32v2
+	li		a2, CH32V1_MVENDORID
 	bne     a1, a2, chip_not_supported
-	j	_init_ch32					# CH32VF103 identified,
+	j	_init_ch32					# CH32V103 identified,
+
+try_ch32v2:							# Check if we are runnng on a CH32V203
+	li      a2, CH32V2_MARCHID
+	bne     a0, a2, chip_not_supported
+	li		a2, CH32V2_MVENDORID
+	bne     a1, a2, chip_not_supported
+	j	_init_ch32					# CH32V203 identified,
 
 
 chip_not_supported:

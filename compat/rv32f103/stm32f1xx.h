@@ -29,4 +29,10 @@
 #define POSITION_VAL(VAL)     (__CLZ(__RBIT(VAL))) 
 
 
+
+#define ATOMIC_SET_BIT(REG, BIT) __atomic_fetch_or(&REG, BIT, __ATOMIC_RELAXED)
+
+#define ATOMIC_CLEAR_BIT(REG, BIT) __atomic_fetch_and(&REG, ~BIT, __ATOMIC_RELAXED)
+
+
 #endif // __STM32F1XX_H__

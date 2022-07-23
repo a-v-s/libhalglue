@@ -29,6 +29,7 @@ typedef struct i2c_instance_t{
 	i2cm_send_f i2cm_send;
 	i2cm_recv_f i2cm_recv;
 	i2cm_isok_f i2cm_isok;
+	uint32_t speed_hz;
 	uint8_t sda_pin;
 	uint8_t scl_pin;
 	uint8_t hw_nr; 	       ///< Hardware number
