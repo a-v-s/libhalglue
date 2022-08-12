@@ -213,9 +213,11 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t si
 //		prev = bshal_spim;
 //	}
 
-	result = bshal_spim_config(bshal_spim);
-	if (result)
-		return result;
+	// Well, it might break thm3060 and pn5180?
+
+//	result = bshal_spim_config(bshal_spim);
+//	if (result)
+//		return result;
 
 	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 
@@ -227,9 +229,10 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t si
 }
 int bshal_spim_receive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
-	int result = bshal_spim_config(bshal_spim);
-	if (result)
-		return result;
+	int result;
+//	result = bshal_spim_config(bshal_spim);
+//	if (result)
+//		return result;
 
 	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 	result = HAL_SPI_Receive(bshal_spim->drv_specific, data, size, 1000);
