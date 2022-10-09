@@ -184,9 +184,10 @@ int bshal_spim_init(bshal_spim_instance_t *config) {
 
 int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
-	int result = bshal_spim_config(bshal_spim);
-	if (result)
-		return result;
+		int result;
+//	result = bshal_spim_config(bshal_spim);
+//	if (result)
+//		return result;
 
 	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
 	result = HAL_SPI_TransmitReceive(bshal_spim->drv_specific, data, data,
@@ -195,6 +196,22 @@ int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data, size_t 
 			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
 	return result;
 }
+
+int bshal_spim_transceive_split(bshal_spim_instance_t *bshal_spim, void *txdata,void * rxdata, size_t size,
+		bool nostop) {
+		int result;
+//	int result = bshal_spim_config(bshal_spim);
+//	if (result)
+//		return result;
+
+	bshal_gpio_write_pin(bshal_spim->cs_pin, bshal_spim->cs_pol);
+	result = HAL_SPI_TransmitReceive(bshal_spim->drv_specific, txdata, rxdata,
+			size, 1000);
+	if (!nostop)
+			bshal_gpio_write_pin(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+	return result;
+}
+
 
 int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
 		bool nostop) {
