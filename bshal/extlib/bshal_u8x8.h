@@ -9,9 +9,9 @@
 #define LIBHALGLUE_BSHAL_EXTLIB_BSHAL_U8X8_H_
 
 #include "system.h"
-#include "u8g2.h"
-#include "u8x8.h"
-#include "u8x8_spi.h"
+//#include "u8g2.h"
+//#include "u8x8.h"
+//#include "u8x8_spi.h"
 #include "bshal_spim.h"
 
 

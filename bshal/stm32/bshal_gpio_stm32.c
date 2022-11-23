@@ -237,6 +237,9 @@ void bshal_gpio_port_enable_clock(uint8_t bs_pin) {
 }
 
 int bshal_gpio_cfg_out(uint8_t bshal_pin){
+	if (bshal_pin == 0xFF) return -1;
+
+
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
