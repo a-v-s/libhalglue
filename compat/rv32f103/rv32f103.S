@@ -7,6 +7,10 @@
 .equ CH32V2_MARCHID,    0xdc68d882
 .equ CH32V2_MVENDORID,  0x00000000
 
+.equ CH32V3_MARCHID,    0xdc68d881
+.equ CH32V3_MVENDORID,  0x00000000
+
+
 
 .extern _init_gd32
 .extern _init_ch32
@@ -107,12 +111,17 @@ try_ch32v1:							# Check if we are runnng on a CH32V103
 
 try_ch32v2:							# Check if we are runnng on a CH32V103
 	li      a2, CH32V2_MARCHID
-	bne     a0, a2, try_ch32v2
+	bne     a0, a2, try_ch32v3
 	li		a2, CH32V2_MVENDORID
 	bne     a1, a2, chip_not_supported
 	j	_init_ch32					# CH32VF103 identified,
 
-
+try_ch32v3:							# Check if we are runnng on a CH32V103
+	li      a2, CH32V3_MARCHID
+	bne     a0, a2, chip_not_supported
+	li		a2, CH32V3_MVENDORID
+	bne     a1, a2, chip_not_supported
+	j	_init_ch32
 
 chip_not_supported:
 	j chip_not_supported			# Endless loop for unknown chip
