@@ -7,48 +7,51 @@
 
 #include <string.h>
 
+#define SPI_COUNT 4
+static spi_device_handle_t m_device_handles[SPI_COUNT] = {0};
+static bool m_device_initialised[SPI_COUNT] = {0};
+
 int bshal_spim_init(bshal_spim_instance_t *bshal_spim) {
-	int ret;
-	spi_device_handle_t spi;
-	spi_bus_config_t buscfg = { .miso_io_num = bshal_spim->miso_pin,
-			.mosi_io_num = bshal_spim->mosi_pin, .sclk_io_num =
-					bshal_spim->sck_pin, .quadwp_io_num = -1, .quadhd_io_num =
-					-1, .max_transfer_sz = 128, };
+	int ret = 0;
+	if (bshal_spim->hw_nr < SPI_COUNT) {
 
-//	spi_device_interface_config_t devcfg = {
-//	.clock_speed_hz = bshal_spim->frequency, .mode = bshal_spim->mode,
-//			.spics_io_num = bshal_spim->cs_pin, .queue_size = 1, // no queue
-//			.pre_cb = NULL,	// no callback
-//			};
-//
 
-	// Software control the CS pin, as hardware control ain't giving the
-	// desired results
-	spi_device_interface_config_t devcfg = {
-		.clock_speed_hz = bshal_spim->frequency, .mode = bshal_spim->mode,
-				.spics_io_num = -1, .queue_size = 1, // no queue
-				.pre_cb = NULL,	// no callback
-				};
+		spi_bus_config_t buscfg = { .miso_io_num = bshal_spim->miso_pin,
+				.mosi_io_num = bshal_spim->mosi_pin, .sclk_io_num =
+						bshal_spim->sck_pin, .quadwp_io_num = -1, .quadhd_io_num =
+						-1, .max_transfer_sz = 128, };
 
-	// TODO Initialise CS pin as GPIO, output mode
-	gpio_config_t pininit ;
-	pininit . pin_bit_mask = 1 << bshal_spim->cs_pin;
-	pininit . mode = GPIO_MODE_OUTPUT;
-	pininit . pull_up_en = 0;
-	pininit . pull_down_en = 0;
-	pininit . intr_type = GPIO_INTR_DISABLE;
-	gpio_config(&pininit);
+		spi_device_interface_config_t devcfg = {
+			.clock_speed_hz = bshal_spim->frequency, .mode = bshal_spim->mode,
+					.spics_io_num = -1, .queue_size = 1, // no queue
+					.pre_cb = NULL,	// no callback
+					};
 
-	gpio_set_level(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+		// TODO Initialise CS pin as GPIO, output mode
+		gpio_config_t pininit ;
+		pininit . pin_bit_mask = 1 << bshal_spim->cs_pin;
+		pininit . mode = GPIO_MODE_OUTPUT;
+		pininit . pull_up_en = 0;
+		pininit . pull_down_en = 0;
+		pininit . intr_type = GPIO_INTR_DISABLE;
+		gpio_config(&pininit);
 
-	bshal_spim->drv_specific = spi;
-	ret = spi_bus_initialize(bshal_spim->hw_nr, &buscfg, SPI_DMA_CH_AUTO);
-	if (ret)
-		return ret;
-	ret = spi_bus_add_device(bshal_spim->hw_nr, &devcfg, &spi);
-	if (ret)
-		return ret;
-	bshal_spim->drv_specific = spi;
+		gpio_set_level(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+
+		if (!m_device_initialised[bshal_spim->hw_nr]) {
+			ret = spi_bus_initialize(bshal_spim->hw_nr, &buscfg, SPI_DMA_CH_AUTO);
+			if (ret)
+				return ret;
+			ret = spi_bus_add_device(bshal_spim->hw_nr, &devcfg, m_device_handles + bshal_spim->hw_nr);
+			if (ret)
+				return ret;
+			m_device_initialised[bshal_spim->hw_nr] = true;
+		}
+		bshal_spim->drv_specific = m_device_handles [bshal_spim->hw_nr];
+	} else {
+		return -1;
+	}
+
 	return ret;
 }
 
