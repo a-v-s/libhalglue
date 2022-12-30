@@ -1,5 +1,6 @@
 
 #include "u8x8_gpio_delay.h"
+#include "bshal_delay.h"
 static u8g2_t *mp_u8g2;
 
 // As per documentation, these are mainly for bit banging.

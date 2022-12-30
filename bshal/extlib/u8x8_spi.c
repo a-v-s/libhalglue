@@ -1,4 +1,5 @@
 
+#include "u8x8_spi.h"
 
 #include "bshal_u8x8.h"
 
@@ -59,7 +60,7 @@ uint8_t bshal_u8x8_byte_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
 		bshal_gpio_write_pin(p_if->spim.ncd_pin, arg_int);
       break;
     case U8X8_MSG_BYTE_START_TRANSFER:
-    	bshal_spim_config(p_if->spim.instance);
+    	bshal_spim_config(&p_if->spim.instance);
 
 		bshal_gpio_write_pin(p_if->spim.instance.cs_pin, u8x8->display_info->chip_enable_level);
 		u8x8->gpio_and_delay_cb(u8x8, U8X8_MSG_DELAY_NANO, u8x8->display_info->post_chip_enable_wait_ns, NULL);

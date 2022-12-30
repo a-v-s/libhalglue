@@ -41,7 +41,7 @@ int bshal_spim_init(bshal_spim_instance_t *bshal_spim) {
 
 	gpio_set_level(bshal_spim->cs_pin, !bshal_spim->cs_pol);
 
-
+	bshal_spim->drv_specific = spi;
 	ret = spi_bus_initialize(bshal_spim->hw_nr, &buscfg, SPI_DMA_CH_AUTO);
 	if (ret)
 		return ret;
