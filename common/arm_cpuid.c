@@ -23,6 +23,7 @@
  SOFTWARE.
  */
 
+#ifdef __ARM_EABI__
 #include <stdint.h>
 #include <stdio.h>
 
@@ -66,3 +67,5 @@ romtable_pid_t extract_romtable_pid(romtable_id_t *rid) {
 					| (uint64_t) rid->pid4 << 32 | (uint64_t) rid->pid5 << 40
 					| (uint64_t) rid->pid6 << 48 | (uint64_t) rid->pid7 << 56 } ;
 		}
+
+#endif

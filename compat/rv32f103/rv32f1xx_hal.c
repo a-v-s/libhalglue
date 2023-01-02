@@ -48,11 +48,17 @@ static uint32_t		tdivms=0;
 #define GD32_MARCHID    0x80000022		// Identifiers for GD32VF103
 #define GD32_MVENDORID  0x0000031E		// Identifiers for GD32VF103
 
+#define CH32V0_MARCHID    0xdc68d841		// Identifiers for CH32V003
+#define CH32V0_MVENDORID  0x00000000		// Identifiers for CH32V003
+
 #define CH32V1_MARCHID    0x00000000		// Identifiers for CH32V103
 #define CH32V1_MVENDORID  0x01020304		// Identifiers for CH32V103
 
 #define CH32V2_MARCHID    0xdc68d882
 #define CH32V2_MVENDORID  0x00000000
+
+#define  CH32V3_MARCHID    0xdc68d881
+#define  CH32V3_MVENDORID  0x00000000
 
 #define read_csr(reg) ({ unsigned long __tmp; \
   asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \
@@ -74,7 +80,9 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority){
 			mrun = CH32V1_TIMER_START;
 			*mrun = 1;
 			break;
+		case CH32V0_MARCHID:
 		case CH32V2_MARCHID:
+		case CH32V3_MARCHID:
 			mtimel = CH32V2_MTIMEL;
 			mtimeh = CH32V2_MTIMEH;
 			tdivms = CH32V2_TDIVMS;

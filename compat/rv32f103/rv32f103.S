@@ -1,6 +1,9 @@
 .equ GD32_MARCHID,    0x80000022		# Identifiers for GD32VF103
 .equ GD32_MVENDORID,  0x0000031E		# Identifiers for GD32VF103
 
+.equ CH32V0_MARCHID,    0xdc68d841		# Identifiers for CH32V003
+.equ CH32V0_MVENDORID,  0x00000000		# Identifiers for CH32V003
+
 .equ CH32V1_MARCHID,    0x00000000		# Identifiers for CH32V103
 .equ CH32V1_MVENDORID,  0x01020304		# Identifiers for CH32V103
 
@@ -102,24 +105,31 @@ try_gd32:							# Check if we are runnng on a GD32VF103
 	bne     a1, a2, chip_not_supported
 	j	_init_gd32					# GD32VF103 identified,
 
-try_ch32v1:							# Check if we are runnng on a CH32V103
+try_ch32v1:							# Check if we are runnng on a CH32V1xx
 	li      a2, CH32V1_MARCHID
 	bne     a0, a2, try_ch32v2
 	li		a2, CH32V1_MVENDORID
 	bne     a1, a2, chip_not_supported
 	j	_init_ch32					# CH32VF103 identified,
 
-try_ch32v2:							# Check if we are runnng on a CH32V103
+try_ch32v2:							# Check if we are runnng on a CH32V2xx
 	li      a2, CH32V2_MARCHID
 	bne     a0, a2, try_ch32v3
 	li		a2, CH32V2_MVENDORID
 	bne     a1, a2, chip_not_supported
 	j	_init_ch32					# CH32VF103 identified,
 
-try_ch32v3:							# Check if we are runnng on a CH32V103
+try_ch32v3:							# Check if we are runnng on a CH32V3xx
 	li      a2, CH32V3_MARCHID
-	bne     a0, a2, chip_not_supported
+	bne     a0, a2, try_ch32v0
 	li		a2, CH32V3_MVENDORID
+	bne     a1, a2, chip_not_supported
+	j	_init_ch32
+
+try_ch32v0:							# Check if we are runnng on a CH32V0xx
+	li      a2, CH32V0_MARCHID
+	bne     a0, a2, chip_not_supported
+	li		a2, CH32V0_MVENDORID
 	bne     a1, a2, chip_not_supported
 	j	_init_ch32
 
