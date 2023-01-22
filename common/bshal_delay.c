@@ -44,6 +44,19 @@
 #include "arm_cpuid.h"
 #endif
 
+
+#if (defined __csky__)
+#include <stdint.h>
+#include "wm_cpu.h"
+uint32_t SystemCoreClock = 80000000;
+
+void SystemCoreClockUpdate(void) {
+	wm_sys_clk sys_clk = {0};
+	SystemClock_Get(&sys_clk);
+	SystemCoreClock = sys_clk.cpuclk * 1000000ul;
+}
+#endif
+
 // Should probably a ramfuncion
 void delay_cycles_asm(uint32_t time_cycles) {
 #if (defined __thumb2__)
@@ -52,11 +65,7 @@ void delay_cycles_asm(uint32_t time_cycles) {
 	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	// 1 cycle
 	asm("bhi loop"); 								// 2 cycles
 #elif (defined __thumb__)
-	// TODO VERIFY THIS 
-	// THis sub in stead of subs would be wrong (not updating the flags? or?)
-	// On an M3, using sub in stead of subs make loop only once rather then
-	// counting down
-	static uint32_t cycles_per_loop = 3;
+	static uint32_t cycles_per_loop = 3; // TODO
 	asm("loop:" );
 	asm("sub  r0, %0" :: "l" (cycles_per_loop) );
 	asm("bhi loop");
@@ -64,7 +73,12 @@ void delay_cycles_asm(uint32_t time_cycles) {
 	uint32_t cycles_per_loop = 3; // TODO
 	asm("loop:");
 	asm("sub  a0, a0, %0" :: "r" (cycles_per_loop) );
-	asm("bgtz a0, loop");
+	asm("bgtz a0, loop"); /// might need to be replaced
+#elif (defined __csky__)
+	uint32_t cycles_per_loop = 6;
+	asm(".loop:");
+	asm("subu	a0, a0, %0" :: "r" (cycles_per_loop) );
+	asm("jbhsz	a0, .loop");
 #else 				
 #error "CPU Architecture Not Supported"
 #endif
