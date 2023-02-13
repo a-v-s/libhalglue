@@ -2,7 +2,8 @@
 
 #include "stm32f1xx_hal.h"
 
-uint32_t SystemCoreClock = 16000000;
+//uint32_t SystemCoreClock = 16000000;
+uint32_t SystemCoreClock = 8000000;
 const uint8_t AHBPrescTable[16U] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
 const uint8_t APBPrescTable[8U] =  {0, 0, 0, 0, 1, 2, 3, 4};
 uint32_t uwTickPrio = 0;
@@ -108,6 +109,27 @@ uint64_t get_timer_value() {
       return ((uint64_t)hi << 32) | lo;
   }
 }
+
+
+#if  (defined __riscv)
+
+// Note... this should go elsewhere but for now this will do
+
+void bshal_delay_ms(uint32_t ms){
+	uint64_t begin = get_timer_value() ;
+	uint64_t delay_for = ms * tdivms;
+	uint64_t delay_until = begin + delay_for;
+	while (get_timer_value() < delay_until);
+}
+
+void bshal_delay_us(uint32_t us){
+	uint64_t begin = get_timer_value() ;
+	uint64_t delay_for = us * tdivms / 1000;
+	uint64_t delay_until = begin + delay_for;
+	while (get_timer_value() < delay_until);
+}
+#endif
+
 
 uint32_t HAL_GetTick(void){
 	return get_timer_value()/tdivms;

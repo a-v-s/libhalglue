@@ -113,5 +113,7 @@ _init_gd32:
     csrw CSR_MTVEC, t0    // exceptions
     csrs CSR_MTVEC, 0x03  // enable   CLIC mode
 
-	j init_gd32
+#	j init_gd32
+	call init_gd32
+	call main
 

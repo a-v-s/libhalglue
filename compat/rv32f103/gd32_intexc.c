@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+
+void _exit(int);
+
 __attribute__((weak)) void handle_nmi(){
 	//TODO
 }

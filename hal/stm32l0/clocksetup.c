@@ -20,6 +20,9 @@ void SystemClock_HSE8_SYS32(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
+
+	// HSE = 8 Mhz
+	// 8 * (12 / 3) = 8 * 4 = 32 Mhz
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -51,7 +54,7 @@ void SystemClock_HSE8_SYS32(void)
   }
 }
 
-void SystemClock_HSI_SYS48(void)
+void SystemClock_HSI16_SYS32(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
@@ -63,6 +66,8 @@ void SystemClock_HSI_SYS48(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
+
+	// HSI = 16 Mhz, 16 * (6 / 3) = 16 * 2 = 32 Mhz
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI48;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;

@@ -98,4 +98,5 @@ _init_ch32:
 	csrw mtvec, t0            # write value t0 to mtvec
 	li t0, 0x08               # load value 0x08 into register t0 
 	csrs mstatus, t0          # write value of t0 into mstatus (mstatus |= MIE, enable interrupts)
-	j main                    # jump to main
+#	j main                    # jump to main
+	call main                    # jump to main

@@ -1,5 +1,6 @@
 #include "bshal_spim_esp32.h"
 #include "bshal_spim.h"
+#include "bshal_delay.h"
 
 #include "driver/spi_master.h"
 #include "driver/gpio.h"
@@ -70,7 +71,7 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data,
 	int ret =  spi_device_transmit(bshal_spim->drv_specific, &t); //Transmit!
 	if (!nostop)
 		gpio_set_level(bshal_spim->cs_pin, !bshal_spim->cs_pol);
-
+	bshal_delay_us(10);
 	return ret;
 
 }
@@ -93,6 +94,7 @@ int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data,
 	int ret =  spi_device_transmit(bshal_spim->drv_specific, &t); //Transmit!
 	if (!nostop)
 			gpio_set_level(bshal_spim->cs_pin, !bshal_spim->cs_pol);
+	bshal_delay_us(10);
 	return ret;
 
 }

@@ -12,13 +12,13 @@
 #include "core_feature_eclic.h"
 #include "riscv_encoding.h"
 
-void init_gd32(void) {
+ void init_gd32(void) {
 	ECLIC_SetMth(0);
 	ECLIC_SetCfgNlbits(4);
 	for (int i = 0; i < 86 ; i++ ) {
 		ECLIC_SetShvIRQ(i, 1);
 	}
 	__enable_irq();
-    main();
+    // main();
 }
 

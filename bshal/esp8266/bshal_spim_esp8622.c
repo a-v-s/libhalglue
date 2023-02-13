@@ -48,10 +48,10 @@ int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data,
 //	puts("");
 
     spi_trans_t trans = {0};
-    trans.bits.mosi = amount * 8;       
+    trans.bits.mosi = amount * 8;
     trans.mosi = data;
 	gpio_set_level(15,0);
-	int result = spi_trans(HSPI_HOST, &trans); 
+	int result = spi_trans(HSPI_HOST, &trans);
 	if (!nostop)
 		gpio_set_level(15,1);
 	return result;
@@ -69,11 +69,11 @@ int bshal_spim_transceive(bshal_spim_instance_t *bshal_spim, void *data,
 
 	spi_trans_t trans = {0};
     trans.bits.mosi = amount * 8;
-    trans.bits.miso = amount * 8;              
+    trans.bits.miso = amount * 8;
     trans.miso = data;
     trans.mosi = data;
 	gpio_set_level(15,0);
-	int result = spi_trans(HSPI_HOST, &trans); 
+	int result = spi_trans(HSPI_HOST, &trans);
 	if (!nostop)
 		gpio_set_level(15,1);
 
@@ -90,10 +90,10 @@ int bshal_spim_recveive(bshal_spim_instance_t *bshal_spim, void *data,
 		size_t amount, bool nostop) {
 	if (amount == 0) return 0;
     spi_trans_t trans = {0};
-    trans.bits.miso = amount * 8;       
+    trans.bits.miso = amount * 8;
     trans.miso = data;
 	gpio_set_level(15,0);
-	int result = spi_trans(HSPI_HOST, &trans); 
+	int result = spi_trans(HSPI_HOST, &trans);
 	if (!nostop)
 		gpio_set_level(15,1);
 

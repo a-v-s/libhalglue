@@ -58,17 +58,39 @@ void SystemCoreClockUpdate(void) {
 #endif
 
 // Should probably a ramfuncion
+// __attribute__( ( section(".data") ) )
+ __attribute__( ( section(".ramfunc") ) )
 void delay_cycles_asm(uint32_t time_cycles) {
 #if (defined __thumb2__)
-	static uint32_t cycles_per_loop = 3;
+/*
+//	static uint32_t cycles_per_loop = 10;	//CKS32F103 RAM	// M3
+	static uint32_t cycles_per_loop = 8;	//STM32F103	RAM // M3
 	asm("loop:" );
-	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	// 1 cycle
-	asm("bhi loop"); 								// 2 cycles
+	asm("subs  r0, %0" :: "r" (cycles_per_loop) ); 	 
+	asm("bhi loop"); 								
+*/
+	asm("loop:" );
+	asm("subs  r0, 6"  ); 	  // cks
+//	asm("subs  r0, 4"  ); 	  // stm
+	asm("bhi loop"); 								
 #elif (defined __thumb__)
-	static uint32_t cycles_per_loop = 3; // TODO
+
+/*
+//	static uint32_t cycles_per_loop = 12; // F072 HSE 48 FLASH
+	static uint32_t cycles_per_loop = 8; // F072 HSE 48 RAM		// M0
+//	static uint32_t cycles_per_loop = 7; // L051 HSE 32 RAM 	// M0+
 	asm("loop:" );
 	asm("sub  r0, %0" :: "l" (cycles_per_loop) );
 	asm("bhi loop");
+*/
+
+	asm("loop:" );
+//	asm("sub  r0, r0, #3"); // L051
+	asm("sub  r0, r0, #4"); // F072
+	asm("bhi loop");
+
+
+
 #elif (defined __riscv)
 	uint32_t cycles_per_loop = 3; // TODO
 	asm("loop:");
@@ -114,7 +136,7 @@ static void delay_cycles_dwt(uint32_t time_cycles) {
 }
 #endif
 
-
+#ifndef __riscv
 void bshal_delay_us(uint32_t delay_us) {
 	bshal_delay_cycles(delay_us * (SystemCoreClock / 1000000));
 }
@@ -122,6 +144,8 @@ void bshal_delay_us(uint32_t delay_us) {
 void bshal_delay_ms(uint32_t delay_ms) {
 	bshal_delay_us(delay_ms * 1000);
 }
+#endif
+
 
 int bshal_delay_init(void) {
 	// Check whether our current core supports DWT
@@ -146,5 +170,6 @@ int bshal_delay_init(void) {
 	else
 #endif
 		bshal_delay_cycles = delay_cycles_asm;
+	return 0;
 }
 

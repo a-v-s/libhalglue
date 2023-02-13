@@ -41,11 +41,81 @@ void ClockSetup_HSE8_SYS48(void) {
 
 
 
+void ClockSetup_HSE8_SYS24(void) {
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct = {0};
+
+	// Configure HSE Oscillator for use with 8 MHz Xtal
+	// PLL Freq 24 MHz	( 3 * 8 = 24 )
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL3;
+  RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
+  HAL_RCC_OscConfig(&RCC_OscInitStruct);
+
+/*
+	// USB clock configuration: PLL is at 48 Mhz, thus 48 = 48
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLL;
+  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+*/
+
+	
+	// TODO: Check flash latency, this is for 48 MHz, 
+	// verify we can put flash latency to 0
+  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1);
+
+  // Enable Power Controller clock 
+  __HAL_RCC_PWR_CLK_ENABLE();
+}
+
+
+void ClockSetup_HSE8_SYS32(void) {
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct = {0};
+
+	// Configure HSE Oscillator for use with 8 MHz Xtal
+	// PLL Freq 24 MHz	( 4 * 8 = 32 )
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL4;
+  RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
+  HAL_RCC_OscConfig(&RCC_OscInitStruct);
+
+/*
+	// USB clock configuration: PLL is at 48 Mhz, thus 48 = 48
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLL;
+  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+*/
+
+	// TODO: Check flash latency, this is for 48 MHz, 
+  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1);
+
+  // Enable Power Controller clock 
+  __HAL_RCC_PWR_CLK_ENABLE();
+}
 
 
 
 
-void ClockSetup_HSI_SYS48(void) {
+
+
+void ClockSetup_HSI48_SYS48(void) {
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct = {0};
@@ -96,6 +166,45 @@ void ClockSetup_HSI_SYS48(void) {
 
   // Start automatic synchronization 
   HAL_RCCEx_CRSConfig (&RCC_CRSInitStruct);
+
+  // Enable Power Controller clock 
+  __HAL_RCC_PWR_CLK_ENABLE();
+}
+
+
+
+void ClockSetup_HSI8_SYS48(void) {
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct = {0};
+
+	// Configure HSI Oscillator 
+	// PLL Freq 48 MHz	( 6 * 8 = 48 )
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
+  RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
+  HAL_RCC_OscConfig(&RCC_OscInitStruct);
+
+	// USB clock configuration: PLL is at 48 Mhz, thus 48 = 48
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLL;
+  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+
+	// TODO: These are the values for STM32F1. Look up the correct values for F0
+	// SYS  Clock to 48 MHz (Max 72 MHz)
+	// AHB  Clock to 48 MHz (Max 72 MHz)
+	// APB1 Clock to 24     (Max 36 MHz)	F0 Seens to configure ABP1 to 48
+	// Flash Latency to 1. 
+	// Flash Latency should be increased for each 24 MHz of clock speed. 
+	// ( 48 / 24 ) - 1 = 1.
+  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1);
 
   // Enable Power Controller clock 
   __HAL_RCC_PWR_CLK_ENABLE();

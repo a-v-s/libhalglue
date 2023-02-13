@@ -93,8 +93,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		int res = bshal_spim_transmit(
 				&((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.instance, &arg, 1,
 				true);
-		if (res)
-			__BKPT(0);
+//		if (res)
+//			__BKPT(0);
 	}
 		break;
 	case UCG_COM_MSG_REPEAT_1_BYTE:
@@ -110,8 +110,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 			int res = bshal_spim_transmit(
 					&((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.instance,
 					buff, arg, true);
-			if (res)
-				__BKPT(0);
+//			if (res)
+//				__BKPT(0);
 		}
 
 		break;
@@ -136,8 +136,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 			int res = bshal_spim_transmit(
 					&((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.instance,
 					buff, 2 * arg, true);
-			if (res)
-				__BKPT(0);
+//			if (res)
+//				__BKPT(0);
 		}
 
 		break;
@@ -164,8 +164,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 			int res = bshal_spim_transmit(
 					&((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.instance,
 					buff, 3 * arg, true);
-			if (res)
-				__BKPT(0);
+//			if (res)
+//				__BKPT(0);
 		}
 
 		break;
@@ -176,8 +176,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		int res = bshal_spim_transmit(
 				&((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.instance, data,
 				arg, true);
-		if (res)
-			__BKPT(0);
+//		if (res)
+//			__BKPT(0);
 	}
 		break;
 	case UCG_COM_MSG_SEND_CD_DATA_SEQUENCE:

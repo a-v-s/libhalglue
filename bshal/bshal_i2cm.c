@@ -28,6 +28,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 int bshal_i2cm_send(bshal_i2cm_instance_t *i2c_instance, uint8_t address,
 		void *p_data, uint8_t length, bool nostop) {
@@ -58,20 +59,18 @@ int bshal_i2cm_isok(bshal_i2cm_instance_t *i2c_instance, uint8_t address) {
 
 // Convenience functions
 int bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
-    int result;
-    /*
-    result = i2c_send(i2c_instance, address, &reg, 1, true);
-    if (result) return result;
-    return i2c_send(i2c_instance, address, p_data, length, false);
-    */
+	int result;
     uint8_t buffer[1+length];
     buffer[0] = reg;
     memcpy(buffer+1, p_data, length);
     return bshal_i2cm_send(i2c_instance, address, buffer, 1+length, false);
 }
 
-int bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
-    int result;
+// It seems weak functions are not correctly implemented on the csky v2 compiler (binary distribution)
+// Would it work if I build it myself?
+//int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length) __attribute__((weak)) ;
+int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
+	int result;
     result = bshal_i2cm_send(i2c_instance, address, &reg, 1, true);
     if (result) return result;
     return bshal_i2cm_recv(i2c_instance, address, p_data, length, false);

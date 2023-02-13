@@ -65,7 +65,9 @@ Reset_Handler:
 
 .option push
 .option	norelax
+	csrs mstatus, 0
 	la gp, __global_pointer$
+    la tp, __tls_base
 .option	pop
 1:
 	la sp, _estack
@@ -93,6 +95,7 @@ Reset_Handler:
 2:
 	/* Call global constructors */
 	call __libc_init_array
+
 
 identify_chip:
 	csrr    a0, marchid				
