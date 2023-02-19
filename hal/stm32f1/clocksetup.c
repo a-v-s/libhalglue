@@ -44,6 +44,14 @@ void ClockSetup_HSE8_SYS72(void) {
 	RCC_OscInitTypeDef oscinitstruct = { 0 };
 	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
 
+
+	// If we wish to switch speed when already on PLL,
+	// We must detach the core from the PLL clock
+	clkinitstruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_0);
+
+
 	// Configure HSE Oscillator for use with 8 MHz Xtal
 	// PLL Freq 72 MHz	( 9 * 8 = 72 )
 	oscinitstruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -54,10 +62,15 @@ void ClockSetup_HSE8_SYS72(void) {
 	oscinitstruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
 	HAL_RCC_OscConfig(&oscinitstruct);
 
+
+
 	// USB clock configuration: 72 / 1.5 = 48
 	rccperiphclkinit.PeriphClockSelection = RCC_PERIPHCLK_USB;
 	rccperiphclkinit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
 	HAL_RCCEx_PeriphCLKConfig(&rccperiphclkinit);
+
+
+
 
 	// SYS  Clock to 72 MHz  (Max 72 MHz)
 	// AHB  Clock to 72 MHz  (Max 72 MHz)
@@ -83,6 +96,14 @@ void ClockSetup_HSE8_SYS48(void) {
 	RCC_ClkInitTypeDef clkinitstruct = { 0 };
 	RCC_OscInitTypeDef oscinitstruct = { 0 };
 	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
+
+
+	// If we wish to switch speed when already on PLL,
+	// We must detach the core from the PLL clock
+	clkinitstruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_0);
+
 
 	// Configure HSE Oscillator for use with 8 MHz Xtal
 	// PLL Freq 72 MHz	( 6 * 8 = 48 )

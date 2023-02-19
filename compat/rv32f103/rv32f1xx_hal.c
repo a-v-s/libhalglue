@@ -66,7 +66,9 @@ static uint32_t		tdivms=0;
   __tmp; })
 
 
-HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority){
+
+void timer_init(void) {
+
 	uint32_t marchid = read_csr(marchid);
 	switch (marchid) {
 		case GD32_MARCHID:
@@ -95,6 +97,12 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority){
 
 }
 
+HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority){
+	(void)TickPriority;
+	timer_init();
+	return 0;
+}
+
 HAL_StatusTypeDef HAL_Init(void){
 	HAL_InitTick(0);
 }
@@ -108,6 +116,10 @@ uint64_t get_timer_value() {
     if (hi == (*mtimeh))
       return ((uint64_t)hi << 32) | lo;
   }
+}
+
+uint32_t get_time_ms(void) {
+	return get_timer_value() / tdivms;
 }
 
 

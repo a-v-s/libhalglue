@@ -74,7 +74,7 @@ Reset_Handler:
 2:
 	/* Load data section from flash to RAM */
 	la a0, _data_lma
-	la a1, _data_vma
+	la a1, _sdata
 	la a2, _edata
 	bgeu a1, a2, 2f
 1:

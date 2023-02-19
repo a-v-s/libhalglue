@@ -59,7 +59,8 @@ void SystemCoreClockUpdate(void) {
 
 // Should probably a ramfuncion
 // __attribute__( ( section(".data") ) )
- __attribute__( ( section(".ramfunc") ) )
+// __attribute__( ( section(".ramfunc") ) )
+// pending results
 void delay_cycles_asm(uint32_t time_cycles) {
 #if (defined __thumb2__)
 /*
