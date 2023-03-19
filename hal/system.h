@@ -127,4 +127,10 @@
 #include "nrf.h"
 #endif
 
+
+#if defined (NRF5340_XXAA_APPLICATION)
+#include "system_nrf5340_application.h"
+#include "nrf.h"
+#endif
+
 #endif // __MCU_H__
