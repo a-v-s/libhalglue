@@ -36,12 +36,35 @@ char* cpuid() {
 	// ARM v7m manual,page 702, section B4.1.2.
 	// 0xE000ED00 // CPUID
 	SCB->CPUID;
+
+
 	cpuid_t *cpuid = (cpuid_t*) (&SCB->CPUID);
+
+	// Cortex M3 r1p1 TRM page 162
+	// To find the document on arm.com, sarch "ARM DDI 0337E"
+	// However, with newer cores like m23, m33, m55, m85
+	// This no longer holds... I guess we'll need a lookup table
+	// with these new namings
 	//
+	// 0xC20	m0
+	// 0xC60	m0+
+	// 0xC21	m1
+	// 0xc23	m3
+	// 0xC24	m4
+	// 0xC27   	m7
+	// 0xD20   	m23
+	// 0xD21	m33
+	// 0xD22	m55
+	// 0xD23	m85
+
+
 	if ((cpuid->PartNo & (0b11 << 10)) == (0b11 << 10)) {
 		// Cortex family
 		if ((cpuid->PartNo & (0b10 << 4)) == (0b10 << 4)) {
 			// Cortex M
+
+			// This works for Cortex M3 and M4
+			// But has to be updated for M33 (which reads as M1) 
 			sprintf(buff, "Cortex-M%d r%dp%d", cpuid->PartNo & 0xF,
 					cpuid->Variant, cpuid->Revision);
 		}
@@ -49,8 +72,8 @@ char* cpuid() {
 	return buff;
 	// But the interesting part comes at 0xE000ED40 // ID_PFR0 (Processor Feature Register) and following
 	// We should be able to access it through
-	SCB->PFR[0];
-	SCB->PFR[1];
+	//SCB->PFR[0];
+	//SCB->PFR[1];
 	/*
 	 __IM  uint32_t PFR[2U];         		 //< Offset: 0x040 (R/ )  Processor Feature Register
 	 __IM  uint32_t DFR;                    //< Offset: 0x048 (R/ )  Debug Feature Register
