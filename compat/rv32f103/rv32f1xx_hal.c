@@ -35,6 +35,10 @@ uint32_t uwTickPrio = 0;
 //#define GD32VF_TFREQ    ((uint32_t)SystemCoreClock/4)  //units HZ
 #define GD32VF_TDIVMS   (4000)
 #define GD32VF_TDIVUS   (4)
+//#define GD32VF_TDIVMS   (20000)
+//#define GD32VF_TDIVUS   (20)
+
+
 
 
 static volatile uint32_t*	mrun;
@@ -129,14 +133,14 @@ uint32_t get_time_ms(void) {
 
 void bshal_delay_ms(uint32_t ms){
 	uint64_t begin = get_timer_value() ;
-	uint64_t delay_for = ms * tdivms;
+	uint64_t delay_for = ms * (SystemCoreClock / tdivms);
 	uint64_t delay_until = begin + delay_for;
 	while (get_timer_value() < delay_until);
 }
 
 void bshal_delay_us(uint32_t us){
 	uint64_t begin = get_timer_value() ;
-	uint64_t delay_for = us * tdivms / 1000;
+	uint64_t delay_for = us * (SystemCoreClock / tdivms) / 1000;
 	uint64_t delay_until = begin + delay_for;
 	while (get_timer_value() < delay_until);
 }
@@ -144,12 +148,12 @@ void bshal_delay_us(uint32_t us){
 
 
 uint32_t HAL_GetTick(void){
-	return get_timer_value()/tdivms;
+	return get_timer_value()/(SystemCoreClock / tdivms);
 }
 
 void HAL_Delay(uint32_t ms){
 	uint64_t begin = get_timer_value() ;
-	uint64_t delay_for = ms * tdivms;
+	uint64_t delay_for = ms * (SystemCoreClock / tdivms);
 	uint64_t delay_until = begin + delay_for;
 	while (get_timer_value() < delay_until);
 }
