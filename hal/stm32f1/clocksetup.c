@@ -145,6 +145,12 @@ void ClockSetup_HSI_SYS48(void) {
 	RCC_OscInitTypeDef oscinitstruct = { 0 };
 	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
 
+	// If we wish to switch speed when already on PLL,
+	// We must detach the core from the PLL clock
+	clkinitstruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_0);
+
 	// Configure HSI Internal RC Oscillator. It runs at 8 MHz, but when used
 	// as an PLL input, it is divided by 2, so this gives 4 MHz
 	// 12 * 4 = 48
@@ -176,4 +182,19 @@ void ClockSetup_HSI_SYS48(void) {
 	clkinitstruct.APB2CLKDivider = RCC_HCLK_DIV1;
 	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_1);
 	SystemCoreClockUpdate();
+}
+
+void ClockSetup_HSI_SYS8(void) {
+	RCC_ClkInitTypeDef clkinitstruct = { 0 };
+
+	// Run at HSI without PLL
+	clkinitstruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK
+				| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+	clkinitstruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	clkinitstruct.APB1CLKDivider = RCC_HCLK_DIV2;
+	clkinitstruct.APB2CLKDivider = RCC_HCLK_DIV1;
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_0);
+	SystemCoreClockUpdate();
+
 }
