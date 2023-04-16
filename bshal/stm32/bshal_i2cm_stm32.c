@@ -10,7 +10,7 @@
 int bshal_stm32_i2cm_send(void *drv_specific, uint8_t address, void *p_data,
 		uint8_t length, bool nostop) {
 	int result = HAL_I2C_Master_Transmit(drv_specific, address << 1, p_data,
-			length, 100);
+			length, 10);
 	if (result) {
 		I2C_HandleTypeDef *hi2c = drv_specific;
 		if (hi2c->Instance->SR2 & I2C_SR2_BUSY) {
@@ -27,7 +27,7 @@ int bshal_stm32_i2cm_send(void *drv_specific, uint8_t address, void *p_data,
 int bshal_stm32_i2cm_recv(void *drv_specific, uint8_t address, void *p_data,
 		uint8_t length, bool nostop) {
 	int result = HAL_I2C_Master_Receive(drv_specific, address << 1, p_data,
-			length, 100);
+			length, 10);
 	if (result) {
 		I2C_HandleTypeDef *hi2c = drv_specific;
 		if (hi2c->Instance->SR2 & I2C_SR2_BUSY) {
