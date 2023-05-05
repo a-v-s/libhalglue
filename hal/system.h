@@ -133,4 +133,9 @@
 #include "nrf.h"
 #endif
 
+
+#if defined (GECKO)
+#include "em_device.h"
+#endif
+
 #endif // __MCU_H__

@@ -11,5 +11,6 @@ uint8_t bshal_gpio_encode_pin(GPIO_TypeDef * port, uint16_t pin);
 void bshal_gpio_decode_pin(uint8_t bs_pin, GPIO_TypeDef ** port, uint16_t *pin);
 void bshal_gpio_write_pin(uint8_t bs_pin, bool val);
 void bshal_gpio_port_enable_clock(uint8_t bs_pin);
+int bshal_gpio_cfg_out(uint8_t bshal_pin);
 
 #endif //BSHAL_GPIO_STM32
