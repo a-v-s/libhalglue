@@ -34,9 +34,9 @@ int bshal_gpio_gecko_routeloc(GPIO_Port_TypeDef port, uint8_t pin) {
 		if ( pin < 9) return -1;
 		if (pin > 15) return -1;
 		return 17 + pin -9;
-	case gpioPortF:
-		if (pin > 7) return -1;
-		return 24 + pin;
+//	case gpioPortF:
+//		if (pin > 7) return -1;
+//		return 24 + pin;
 	default:
 		return -1;
 	}
@@ -44,7 +44,7 @@ int bshal_gpio_gecko_routeloc(GPIO_Port_TypeDef port, uint8_t pin) {
 
 void bshal_gpio_write_pin(uint8_t bs_pin, bool val) {
 	GPIO_Port_TypeDef port = -1;
-	uint16_t pin = -1;
+	uint8_t pin = -1;
 	bshal_gpio_decode_pin(bs_pin, &port, &pin);
 	if (val)
 		GPIO_PinOutSet(port, pin);
@@ -61,7 +61,7 @@ int bshal_gpio_cfg_out(uint8_t bshal_pin) {
 	if (bshal_pin == 0xFF)
 		return -1;
 	GPIO_Port_TypeDef efr32_port = -1;
-	uint16_t efr32_pin = -1;
+	uint8_t efr32_pin = -1;
 	bshal_gpio_decode_pin(bshal_pin, &efr32_port, &efr32_pin);
 	GPIO_PinModeSet(efr32_port, efr32_pin, gpioModePushPull, 0);
 	return 0;
