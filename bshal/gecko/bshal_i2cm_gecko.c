@@ -46,7 +46,7 @@ int bshal_gecko_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 	scl_route_loc = bshal_gpio_gecko_routeloc(port, pin);
 	if (-1 == scl_route_loc)
 		return -1;
-	scl_route_loc = ((scl_route_loc - 1) % 32) << 8;
+	scl_route_loc = ((scl_route_loc - 1) % 32) << _I2C_ROUTELOC0_SCLLOC_SHIFT;
 	I2C0->ROUTELOC0 = (I2C0->ROUTELOC0 & (~_I2C_ROUTELOC0_SCLLOC_MASK))
 			| scl_route_loc;
 #elif GECKO == 2
@@ -63,7 +63,7 @@ int bshal_gecko_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 	if (-1 == sda_route_loc)
 		return -1;
 	I2C0->ROUTELOC0 = (I2C0->ROUTELOC0 & (~_I2C_ROUTELOC0_SDALOC_MASK))
-			| sda_route_loc;
+			| (sda_route_loc << _I2C_ROUTELOC0_SDALOC_SHIFT);
 #elif GECKO == 2
 	  GPIO->I2CROUTE[0].SDAROUTE = (GPIO->I2CROUTE[0].SDAROUTE & ~_GPIO_I2C_SDAROUTE_MASK)
 	                        | (port << _GPIO_I2C_SDAROUTE_PORT_SHIFT

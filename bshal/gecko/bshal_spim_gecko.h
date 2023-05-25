@@ -8,6 +8,7 @@
 #ifndef LIBHALGLUE_BSHAL_GECKO_BSHAL_SPIM_GECKO_H_
 #define LIBHALGLUE_BSHAL_GECKO_BSHAL_SPIM_GECKO_H_
 
+#include <em_usart.h>
 
 
 
