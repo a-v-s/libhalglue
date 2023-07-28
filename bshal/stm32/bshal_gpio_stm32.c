@@ -1,4 +1,4 @@
-
+#pragma GCC optimize "O3"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -151,6 +151,16 @@ void bshal_gpio_write_pin(uint8_t bs_pin, bool val) {
 		HAL_GPIO_WritePin(port, pin, val);
 }
 
+bool bshal_gpio_read_pin(uint8_t bs_pin) {
+	GPIO_TypeDef *port = NULL;
+	uint16_t pin = -1;
+	bshal_gpio_decode_pin(bs_pin,&port,&pin);
+	if (port)
+		return HAL_GPIO_ReadPin(port, pin);
+	return false;
+}
+
+
 void bshal_gpio_port_enable_clock(uint8_t bs_pin) {
 
 	GPIO_TypeDef *port;
@@ -236,19 +246,40 @@ void bshal_gpio_port_enable_clock(uint8_t bs_pin) {
 	}
 }
 
-int bshal_gpio_cfg_out(uint8_t bshal_pin){
+int bshal_gpio_cfg_out(uint8_t bshal_pin, gpio_drive_type_t drive_type, bool init_val){
 	if (bshal_pin == 0xFF) return -1;
 
 
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = (drive_type ==pushpull) ? GPIO_NOPULL : init_val ? GPIO_PULLUP : GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_TypeDef *stm32_port = NULL;
 	uint16_t stm32_pin = -1;
 	bshal_gpio_decode_pin(bshal_pin, &stm32_port, &stm32_pin);
 	bshal_gpio_port_enable_clock(bshal_pin);
 	if (stm32_pin) {
-		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_InitStruct.Mode = (drive_type ==pushpull) ? GPIO_MODE_OUTPUT_PP : GPIO_MODE_OUTPUT_OD;
+		GPIO_InitStruct.Pin = stm32_pin;
+		bshal_gpio_write_pin(bshal_pin, init_val);
+		HAL_GPIO_Init(stm32_port, &GPIO_InitStruct);
+		return 0;
+	}
+	return -1;
+}
+
+int bshal_gpio_cfg_in(uint8_t bshal_pin, gpio_drive_type_t drive_type, bool init_val){
+	if (bshal_pin == 0xFF) return -1;
+
+
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.Pull = (drive_type ==pushpull) ? GPIO_NOPULL : init_val ? GPIO_PULLUP : GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_TypeDef *stm32_port = NULL;
+	uint16_t stm32_pin = -1;
+	bshal_gpio_decode_pin(bshal_pin, &stm32_port, &stm32_pin);
+	bshal_gpio_port_enable_clock(bshal_pin);
+	if (stm32_pin) {
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Pin = stm32_pin;
 		HAL_GPIO_Init(stm32_port, &GPIO_InitStruct);
 		return 0;

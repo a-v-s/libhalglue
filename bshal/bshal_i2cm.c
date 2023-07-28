@@ -69,7 +69,7 @@ int bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, ui
 // It seems weak functions are not correctly implemented on the csky v2 compiler (binary distribution)
 // Would it work if I build it myself?
 //int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length) __attribute__((weak)) ;
-int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
+int  __attribute__((weak))  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
 	int result;
     result = bshal_i2cm_send(i2c_instance, address, &reg, 1, true);
     if (result) return result;

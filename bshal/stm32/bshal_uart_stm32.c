@@ -118,17 +118,18 @@ int bshal_stm32_uart_init(bshal_uart_instance_t *uart_instance) {
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-
+	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
 
 }
 
+
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
-	bshal_uart_recv_cb(__hacky_uart_instance->async,  Size);
+	__hacky_uart_instance->async->callback(__hacky_uart_instance->async->receive_buffer, Size);
 	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
 }
 
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
 
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
 	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
 
 }
@@ -147,4 +148,12 @@ void USART3_IRQHandler(void) {
 
 void test_uart_send(char* str, size_t len) {
 	HAL_UART_Transmit(__hacky_uart_instance->drv_specific, str, len, 1000);
+}
+
+int bshal_stm32_uart_tx(bshal_uart_instance_t *uart_instance, void * p_data, size_t length) {
+	return HAL_UART_Transmit(uart_instance->drv_specific, p_data, length, 1000);
+}
+
+int bshal_stm32_uart_rx(bshal_uart_instance_t *uart_instance, void * p_data, size_t length) {
+	return HAL_UART_Receive(uart_instance->drv_specific, p_data, length, 1000);
 }

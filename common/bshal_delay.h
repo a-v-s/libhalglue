@@ -13,6 +13,7 @@
 #include <stdint.h>
 
 typedef void (*delay_fn)(uint32_t);
+extern delay_fn bshal_delay_cycles;
 
 //extern delay_fn bshal_delay_ms;
 //extern delay_fn bshal_delay_us;

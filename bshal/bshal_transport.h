@@ -24,16 +24,16 @@ int __attribute__((weak))  bshal_spim_recveive(bshal_spim_instance_t * bshal_spi
 int __attribute__((weak)) bshal_spim_transceive(bshal_spim_instance_t * bshal_spim, void *data, size_t amount, bool nostop)
  {return -1;}
 
-int __attribute__((weak))  bshal_i2cm_send(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop)
-{return -1;}
-int __attribute__((weak))  bshal_i2cm_recv(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop)
-{return -1;}
-int __attribute__((weak))  bshal_i2cm_isok(bshal_i2cm_instance_t* i2c_instance, uint8_t address)
-{return -1;}
-int __attribute__((weak)) bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length)
- {return -1;}
-int __attribute__((weak))  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length)
-{return -1;}
+//int __attribute__((weak))  bshal_i2cm_send(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop)
+//{return -1;}
+//int __attribute__((weak))  bshal_i2cm_recv(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop)
+//{return -1;}
+//int __attribute__((weak))  bshal_i2cm_isok(bshal_i2cm_instance_t* i2c_instance, uint8_t address)
+//{return -1;}
+//int __attribute__((weak)) bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length)
+// {return -1;}
+//int __attribute__((weak))  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length)
+//{return -1;}
 
 
 
