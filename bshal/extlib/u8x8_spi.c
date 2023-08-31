@@ -53,7 +53,7 @@ uint8_t bshal_u8x8_byte_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int,
 
 		bshal_gpio_write_pin(p_if->spim.instance.cs_pin, u8x8->display_info->chip_disable_level);
 
-		bshal_gpio_cfg_out(p_if->spim.ncd_pin);
+		bshal_gpio_cfg_out(p_if->spim.ncd_pin, pushpull, 0);
 
       break;
     case U8X8_MSG_BYTE_SET_DC:

@@ -124,14 +124,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
-	__hacky_uart_instance->async->callback(__hacky_uart_instance->async->receive_buffer, Size);
+	//__hacky_uart_instance->async->callback(__hacky_uart_instance->async->receive_buffer, Size);
+	bshal_uart_recv_cb( __hacky_uart_instance->async, Size);
 	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
 }
 
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
 	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
-
 }
 
 void USART1_IRQHandler(void) {

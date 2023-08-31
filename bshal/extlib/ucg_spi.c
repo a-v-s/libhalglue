@@ -32,8 +32,8 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		/* setup i/o or do any other setup */
 
 
-		bshal_gpio_cfg_out( ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.ncd_pin );
-		bshal_gpio_cfg_out(  ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.instance.rs_pin  );
+		bshal_gpio_cfg_out( ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.ncd_pin, 0, 1 );
+		bshal_gpio_cfg_out(  ((bshal_ucg_t*) ucg_GetUserPtr(ucg))->spim.instance.rs_pin, 0, 1  );
 
 
 		break;
@@ -71,7 +71,7 @@ int16_t ucg_com_bshal(ucg_t *ucg, int16_t msg, uint16_t arg, uint8_t *data) {
 		/* "arg" = 0: set the command/data (a0) output line to 0 */
 
 		bshal_gpio_write_pin(
-				((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.ncd_pin, arg);
+				((bshal_ucg_t*) (ucg_GetUserPtr(ucg)))->spim.ncd_pin, arg>0);
 
 		break;
 	case UCG_COM_MSG_CHANGE_CS_LINE:
