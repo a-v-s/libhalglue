@@ -53,21 +53,26 @@ void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
 					char * begin = info->process_buffer;
 					size_t len = sync_end_pos - sync_begin_pos;
 					if (!info->sync_begin_include) {
-						begin += info->sync_begin_len;
-						len -= info->sync_begin_len;
+						begin += info->sync_begin_len-1;
+						len -= info->sync_begin_len-1;
 					}
 
 					if (info->sync_end_include)
 						len += info->sync_end_len;
 
 					if (info->null_terminated_string) {
-						len++;
-						if (info->sync_end_include)
-							info->process_buffer[proc_buff_pos+1]=0;
-						else
-							info->process_buffer[sync_end_pos]=0;
+						info->process_buffer[proc_buff_pos+1]=0;
+
+						//len++;
+//						if (info->sync_end_include) {
+//							info->process_buffer[proc_buff_pos+1]=0;
+//						} else {
+//							info->process_buffer[sync_end_pos-info->sync_end_len]=0;
+//						}
 					}
 
+					// well... len is incorrectly set
+					len = strlen(begin); // temp fix
 					info->callback(begin, len);
 
 					synced = false;
