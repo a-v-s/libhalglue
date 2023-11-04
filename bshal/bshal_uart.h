@@ -16,8 +16,18 @@ typedef void (*bshal_uart_async_cb)(void* data, size_t size);
 typedef struct {
 	uint8_t    * receive_buffer;
 	size_t    receive_buffer_len;
-	uint8_t    * process_buffer;
-	size_t    process_buffer_len;
+
+	uint8_t    * preprocess_buffer;
+	size_t    preprocess_buffer_len;
+	uint32_t preprocess_buff_read;
+	uint32_t preprocess_buff_write;
+
+
+	uint8_t    * postprocess_buffer;
+	size_t    postprocess_buffer_len;
+
+
+
 	uint8_t * sync_begin_data;
 	size_t    sync_begin_len;
 	uint8_t   sync_begin_include;
