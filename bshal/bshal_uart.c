@@ -10,22 +10,24 @@
 #include <string.h>
 #include <stdio.h>
 
-
 #include "bshal_uart.h"
 
 void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
-	if (size < (info->preprocess_buffer_len-info->preprocess_buff_write) ) {
-		memcpy(info->preprocess_buffer+info->preprocess_buff_write, info->receive_buffer,size);
+	if (size < (info->preprocess_buffer_len - info->preprocess_buff_write)) {
+		memcpy(info->preprocess_buffer + info->preprocess_buff_write,
+				info->receive_buffer, size);
 		info->preprocess_buff_write += size;
 	} else {
-		int first_part = (info->preprocess_buffer_len-info->preprocess_buff_write);
+		int first_part = (info->preprocess_buffer_len
+				- info->preprocess_buff_write);
 		int remaining = size - first_part;
-		memcpy(info->preprocess_buffer+info->preprocess_buff_write, info->receive_buffer,first_part);
-		memcpy(info->preprocess_buffer, info->receive_buffer+first_part,remaining);
-		info->preprocess_buff_write=remaining;
+		memcpy(info->preprocess_buffer + info->preprocess_buff_write,
+				info->receive_buffer, first_part);
+		memcpy(info->preprocess_buffer, info->receive_buffer + first_part,
+				remaining);
+		info->preprocess_buff_write = remaining;
 	}
 }
-
 
 void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
@@ -44,8 +46,6 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 	static int resync_retry_cnt = 0;
 
-
-
 	if (proc_buff_pos >= info->postprocess_buffer_len) {
 		// INVALID
 		synced = false;
@@ -56,7 +56,7 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 		proc_buff_pos = 0;
 	}
 
-	while (info->preprocess_buff_read !=  info->preprocess_buff_write)
+	while (info->preprocess_buff_read != info->preprocess_buff_write)
 		if (synced) {
 
 			info->postprocess_buffer[proc_buff_pos] =
@@ -66,8 +66,9 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 			if (info->sync_begin_len) {
 				if (info->preprocess_buffer[info->preprocess_buff_read]
-										 == info->sync_begin_data[resync_begin_cnt]) {
-					if (!resync_begin_pos) resync_begin_pos = proc_buff_pos;
+											== info->sync_begin_data[resync_begin_cnt]) {
+					if (!resync_begin_pos)
+						resync_begin_pos = proc_buff_pos;
 
 					resync_retry_cnt++;
 					if (resync_retry_cnt > 1)
@@ -82,7 +83,7 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 					}
 
 					info->preprocess_buff_read++;
-					info->preprocess_buff_read%=info->preprocess_buffer_len;
+					info->preprocess_buff_read %= info->preprocess_buffer_len;
 					continue;
 				} else {
 					resync_begin_pos = resync_begin_cnt = 0;
@@ -91,21 +92,21 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 			//--resync
 
-			if (info->preprocess_buff_read ==  info->preprocess_buff_write)
+			if (info->preprocess_buff_read == info->preprocess_buff_write)
 				return;
 			if (info->sync_end_len) {
 				if (info->preprocess_buffer[info->preprocess_buff_read]
-										 == info->sync_end[sync_end_cnt]) {
-//					if (!sync_end_cnt)
-//						sync_end_pos = recv_buff_pos;
+											== info->sync_end[sync_end_cnt]) {
+					//					if (!sync_end_cnt)
+					//						sync_end_pos = recv_buff_pos;
 					sync_end_cnt++;
 					if (sync_end_cnt == info->sync_end_len) {
 						// Synchronisation completed
 
 						char *begin = info->postprocess_buffer;
 						size_t len = proc_buff_pos;
-//						if ((int) len < 0)
-//							asm("bkpt 0");
+						//						if ((int) len < 0)
+						//							asm("bkpt 0");
 
 						if (!info->sync_begin_include) {
 							begin += info->sync_begin_len - 1;
@@ -120,7 +121,7 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 							if (info->sync_end_include) {
 								info->postprocess_buffer[proc_buff_pos
-													 + info->sync_end_len] = 0;
+														 + info->sync_end_len] = 0;
 							} else {
 								info->postprocess_buffer[proc_buff_pos] = 0;
 							}
@@ -145,31 +146,31 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 			proc_buff_pos++;
 			info->preprocess_buff_read++;
-			info->preprocess_buff_read%=info->preprocess_buffer_len;
+			info->preprocess_buff_read %= info->preprocess_buffer_len;
 		} else {
 			// Not synced, search for synchronisation marker
 
 			if (info->sync_begin_len) {
 				if (info->preprocess_buffer[info->preprocess_buff_read]
-										 == info->sync_begin_data[sync_begin_pos]) {
-//					if (!sync_begin_cnt)
-//						sync_begin_pos = recv_buff_pos;
+											== info->sync_begin_data[sync_begin_pos]) {
+					//					if (!sync_begin_cnt)
+					//						sync_begin_pos = recv_buff_pos;
 					sync_begin_cnt++;
 					info->preprocess_buff_read++;
-					info->preprocess_buff_read%=info->preprocess_buffer_len;
+					info->preprocess_buff_read %= info->preprocess_buffer_len;
 					if (sync_begin_cnt == info->sync_begin_len) {
 						synced = true;
-						resync_retry_cnt=0;
-//						if (info->sync_begin_include) {
-//							memcpy(info->postprocess_buffer + proc_buff_pos,
-//									info->preprocess_buffer + sync_begin_pos,
-//									info->sync_begin_len);
-//							proc_buff_pos += info->sync_begin_len;
-//						}
+						resync_retry_cnt = 0;
+						//						if (info->sync_begin_include) {
+						//							memcpy(info->postprocess_buffer + proc_buff_pos,
+						//									info->preprocess_buffer + sync_begin_pos,
+						//									info->sync_begin_len);
+						//							proc_buff_pos += info->sync_begin_len;
+						//						}
 					}
 				} else {
 					info->preprocess_buff_read++;
-					info->preprocess_buff_read%=info->preprocess_buffer_len;
+					info->preprocess_buff_read %= info->preprocess_buffer_len;
 				}
 			} else {
 				// No begin-of-message marker
@@ -183,170 +184,118 @@ void bshal_uart_recv_process(bshal_uart_async_t *info) {
 
 		}
 
-
-
 }
 
-/*
-void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
-//	static bool synced = false;
+void bshal_uart_at_recv_process(bshal_uart_async_at_t *info) {
 
-	// be synced in inital state. need to make this a
-	// configurable option
-	static bool synced = true;
+	if (info->data_mode) {
 
-	static int sync_begin_pos = 0;
-	static int sync_begin_cnt = 0;
-	static int sync_end_pos = 0;
-	static int sync_end_cnt = 0;
-	//static int recv_buff_pos = 0;
-	static int proc_buff_pos = 0;
+		if (info->data_callback) {
+			if (info->preprocess_buff_read < info->preprocess_buff_write) {
+				info->data_callback(
+						info->preprocess_buffer + info->preprocess_buff_read,
+						info->preprocess_buff_write
+						- info->preprocess_buff_read);
+			} else {
+				info->data_callback(
+						info->preprocess_buffer + info->preprocess_buff_read,
+						info->preprocess_buffer_len
+						- info->preprocess_buff_read);
+				info->data_callback(info->preprocess_buffer,
+						info->preprocess_buff_write);
+			}
+		}
+		info->preprocess_buff_read = info->preprocess_buff_write;
 
-	int recv_buff_pos = 0;
+	} else {
+		// be synced in inital state. need to make this a
+		// configurable option
+		static bool synced = true;
 
-	static int resync_begin_pos = 0;
-	static int resync_begin_cnt = 0;
+		static int sync_begin_pos = 0;
+		static int proc_buff_pos = 0;
 
-	static int resync_retry_cnt = 0;
+		if (proc_buff_pos >= info->postprocess_buffer_len) {
+			// INVALID
+			synced = false;
+			sync_begin_pos = 0;
+			proc_buff_pos = 0;
+		}
 
+		while (info->preprocess_buff_read != info->preprocess_buff_write) {
+			if (synced) {
 
-	//	if (strstr(info->receive_buffer, "M590")) asm("bkpt 0");
-	if (size <= 0)
-		return;
+				info->postprocess_buffer[proc_buff_pos] =
+						info->preprocess_buffer[info->preprocess_buff_read];
 
-	if (proc_buff_pos >= info->postprocess_buffer_len) {
-		// INVALID
-		synced = false;
-		sync_begin_pos = 0;
-		sync_begin_cnt = 0;
-		sync_end_pos = 0;
-		sync_end_cnt = 0;
-		recv_buff_pos = 0;
-		proc_buff_pos = 0;
-	}
+				//--resync, in case we have missed an \r
+				// possibly the modem rebooted?
 
-	while (recv_buff_pos < size)
-		if (synced) {
+				if (info->preprocess_buffer[info->preprocess_buff_read]
+											== '\n') {
+					// Begin of a new line on the \n character.
+					// Note: This can be changed with the S4 command
 
-			info->postprocess_buffer[proc_buff_pos] =
-					info->receive_buffer[recv_buff_pos];
+					sync_begin_pos = proc_buff_pos = 0;
+					memset(info->postprocess_buffer, 0,
+							info->postprocess_buffer_len);
+					synced = true;
+				}
+				//--resync
 
-			//--resync
+				if (info->preprocess_buff_read == info->preprocess_buff_write)
+					return;
 
-			if (info->sync_begin_len) {
-				if (info->receive_buffer[recv_buff_pos]
-										 == info->sync_begin_data[resync_begin_cnt]) {
-					if (!resync_begin_pos) resync_begin_pos = recv_buff_pos;
+				if (info->preprocess_buffer[info->preprocess_buff_read]
+											== '\r') {
+					// End of a line on the \r character.
+					// Note: This can be changed with the S3 command
 
-					resync_retry_cnt++;
-					if (resync_retry_cnt > 1)
-						asm("bkpt 0");
+					char *begin = info->postprocess_buffer;
+					size_t len = proc_buff_pos;
 
-					if (info->sync_begin_len) {
-						synced = true;
-						sync_begin_pos = resync_begin_pos;
-					} else {
-						resync_begin_cnt = 1;
-						resync_begin_pos = recv_buff_pos;
-					}
+					info->postprocess_buffer[proc_buff_pos] = 0;
 
-					recv_buff_pos++;
+					if (info->command_callback)
+						info->command_callback(begin, len);
+
+					synced = false;
+					sync_begin_pos = proc_buff_pos = 0;
+					memset(info->postprocess_buffer, 0,
+							info->postprocess_buffer_len);
 					continue;
-				} else {
-					resync_begin_pos = resync_begin_cnt = 0;
+
 				}
-			}
 
-			//--resync
-
-			if (recv_buff_pos >= size)
-				return;
-			if (info->sync_end_len) {
-				if (info->receive_buffer[recv_buff_pos]
-										 == info->sync_end[sync_end_cnt]) {
-					if (!sync_end_cnt)
-						sync_end_pos = proc_buff_pos;	//recv_buff_pos;
-					sync_end_cnt++;
-					if (sync_end_cnt == info->sync_end_len) {
-						// Synchronisation completed
-
-						char *begin = info->postprocess_buffer;
-						size_t len = proc_buff_pos;
-//						if ((int) len < 0)
-//							asm("bkpt 0");
-
-						if (!info->sync_begin_include) {
-							begin += info->sync_begin_len - 1;
-							len -= info->sync_begin_len - 1;
-						}
-
-						if (info->sync_end_include) {
-							len += info->sync_end_len;
-						}
-
-						if (info->null_terminated_string) {
-
-							if (info->sync_end_include) {
-								info->postprocess_buffer[proc_buff_pos
-													 + info->sync_end_len] = 0;
-							} else {
-								info->postprocess_buffer[proc_buff_pos] = 0;
-							}
-						}
-
-						info->callback(begin, len);
-
-						synced = false;
-						sync_begin_pos = sync_end_pos = sync_begin_cnt =
-								sync_end_cnt = proc_buff_pos = 0;
-						memset(info->postprocess_buffer, 0,
-								info->postprocess_buffer_len);
-						continue;
-
-					}
-				}
+				proc_buff_pos++;
+				info->preprocess_buff_read++;
+				info->preprocess_buff_read %= info->preprocess_buffer_len;
 			} else {
-				// No end-of-message marker
-				// Not handled yet
-				// We should trigger the callback on a new transmission mark
-			}
+				// Not synced, search for synchronisation marker
 
-			proc_buff_pos++;
-			recv_buff_pos++;
-		} else {
-			// Not synced, search for synchronisation marker
+				if (info->preprocess_buffer[info->preprocess_buff_read]
+											== '\n') {
+					// Begin of a new line on the \n character.
+					// Note: This can be changed with the S4 command
+					sync_begin_pos = proc_buff_pos = 0;
+					memset(info->postprocess_buffer, 0,
+							info->postprocess_buffer_len);
+					synced = true;
+				} else if (info->preprocess_buffer[info->preprocess_buff_read]
+												   == '>') {
+					// Promps callback
+					if (info->prompt_callback)
+						info->prompt_callback(NULL, 0);
 
-			if (info->sync_begin_len) {
-				if (info->receive_buffer[recv_buff_pos]
-										 == info->sync_begin_data[sync_begin_pos]) {
-					if (!sync_begin_cnt)
-						sync_begin_pos = recv_buff_pos;
-					sync_begin_cnt++;
-					recv_buff_pos++;
-					if (sync_begin_cnt == info->sync_begin_len) {
-						synced = true;
-						resync_retry_cnt=0;
-						if (info->sync_begin_include) {
-							memcpy(info->postprocess_buffer + proc_buff_pos,
-									info->receive_buffer + sync_begin_pos,
-									info->sync_begin_len);
-							proc_buff_pos += info->sync_begin_len;
-						}
-					}
 				} else {
-					recv_buff_pos++;
+					//					printf("Not synced: %c %02X\n",
+					//							info->preprocess_buffer[info->preprocess_buff_read] > ' ' ? info->preprocess_buffer[info->preprocess_buff_read] : ' ',
+					//							info->preprocess_buffer[info->preprocess_buff_read]);
 				}
-			} else {
-				// No begin-of-message marker
-				// Not handled yet
-				// We should trigger the callback on an end of transmission marker
-				// And then begin the new message anyways
 
-				// Would setting the synced flag suffice if we have an end merker ?
-				synced = true;
+				info->preprocess_buff_read++;
+				info->preprocess_buff_read %= info->preprocess_buffer_len;
 			}
-
 		}
-
+	}
 }
-*/

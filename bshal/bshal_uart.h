@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef void (*bshal_uart_async_cb)(void* data, size_t size);
 
@@ -22,11 +23,10 @@ typedef struct {
 	uint32_t preprocess_buff_read;
 	uint32_t preprocess_buff_write;
 
-
 	uint8_t    * postprocess_buffer;
 	size_t    postprocess_buffer_len;
 
-
+	bshal_uart_async_cb callback;
 
 	uint8_t * sync_begin_data;
 	size_t    sync_begin_len;
@@ -37,8 +37,30 @@ typedef struct {
 	uint8_t   max_data_len;
 	uint8_t   null_terminated_string;
 
-	bshal_uart_async_cb callback;
+
 } bshal_uart_async_t;
+
+typedef struct {
+	uint8_t    * receive_buffer;
+	size_t    receive_buffer_len;
+
+	uint8_t    * preprocess_buffer;
+	size_t    preprocess_buffer_len;
+	uint32_t preprocess_buff_read;
+	uint32_t preprocess_buff_write;
+
+	uint8_t    * postprocess_buffer;
+	size_t    postprocess_buffer_len;
+
+	bshal_uart_async_cb command_callback;
+	bshal_uart_async_cb prompt_callback;
+	bshal_uart_async_cb data_callback;
+
+	bool data_mode;
+
+
+} bshal_uart_async_at_t;
+
 
 typedef enum {
 	bshal_uart_flow_control_none,
@@ -64,10 +86,11 @@ typedef struct {
     uint8_t     rxd_pin;            ///< RXD pin number.
     uint8_t     cts_pin;            ///< CTS pin number.
     uint8_t     rts_pin;            ///< RTS pin number.
-    bshal_uart_async_t * async;
+
+    bshal_uart_async_t * async; // async data structure according the the appropriate handler
 
 } bshal_uart_instance_t;
 
-
+void bshal_uart_at_recv_process(bshal_uart_async_at_t *info) ;
 
 #endif /* LIBHALGLUE_BSHAL_UART_H_ */
