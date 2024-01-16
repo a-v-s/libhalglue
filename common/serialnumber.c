@@ -32,10 +32,10 @@ void FormatSerialHexASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
 		size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out, 0, sizeof(tmp_out));
-	for (int i = 0; i < in_size; i++) {
+	for (size_t i = 0; i < in_size; i++) {
 		tmp_out[i % out_size] += in_data[i % in_size];
 	}
-	for (int i = 0; i < out_size; i++) {
+	for (size_t i = 0; i < out_size; i++) {
 		uint8_t tmp = tmp_out[i] % 16;
 		if (tmp < 10) {
 			out_str[i] = '0' + i;
@@ -49,12 +49,12 @@ void FormatSerialHexUTF16(uint8_t *in_data, size_t in_size, uint16_t *out_str,
 		size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out, 0, sizeof(tmp_out));
-	for (int i = 0; i < in_size; i++) {
+	for (size_t i = 0; i < in_size; i++) {
 		// Add or Xor them, what looks better?
 		//tmp_out[i%out_size] += in_data[i%in_size];
 		tmp_out[i % out_size] ^= in_data[i % in_size];
 	}
-	for (int i = 0; i < out_size; i++) {
+	for (size_t i = 0; i < out_size; i++) {
 		uint8_t tmp = tmp_out[i] % 16;
 		if (tmp < 10) {
 			out_str[i] = '0' + tmp;
@@ -68,10 +68,10 @@ void FormatSerialStringASCII(uint8_t *in_data, size_t in_size, uint8_t *out_str,
 		size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out, 0, sizeof(tmp_out));
-	for (int i = 0; i < in_size; i++) {
+	for (size_t i  = 0; i < in_size; i++) {
 		tmp_out[i % out_size] += in_data[i % in_size];
 	}
-	for (int i = 0; i < out_size; i++) {
+	for (size_t i  = 0; i < out_size; i++) {
 		uint8_t tmp = tmp_out[i] % 36;
 		if (tmp < 10) {
 			out_str[i] = '0' + i;
@@ -85,12 +85,12 @@ void FormatSerialStringUTF16(uint8_t *in_data, size_t in_size,
 		uint16_t *out_str, size_t out_size) {
 	uint8_t tmp_out[out_size];
 	memset(tmp_out, 0, sizeof(tmp_out));
-	for (int i = 0; i < in_size; i++) {
+	for (size_t i  = 0; i < in_size; i++) {
 		// Add or Xor them, what looks better?
 		//tmp_out[i%out_size] += in_data[i%in_size];
 		tmp_out[i % out_size] ^= in_data[i % in_size];
 	}
-	for (int i = 0; i < out_size; i++) {
+	for (size_t i  = 0; i < out_size; i++) {
 		uint8_t tmp = tmp_out[i] % 36;
 		if (tmp < 10) {
 			out_str[i] = '0' + tmp;

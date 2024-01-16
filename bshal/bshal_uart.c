@@ -6,6 +6,7 @@
  */
 
 #include <stdbool.h>
+#include <string.h>
 
 #include "bshal_uart.h"
 
@@ -21,7 +22,7 @@ void bshal_uart_recv_cb(bshal_uart_async_t *info, size_t size) {
 	//static int recv_buff_pos = 0;
 	static int proc_buff_pos = 0;
 
-	int recv_buff_pos = 0;
+	unsigned int recv_buff_pos = 0;
 
 	if (size <= 0) return;
 

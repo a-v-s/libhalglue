@@ -37,11 +37,12 @@ int bshal_gecko_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 
 	GPIO_Port_TypeDef port;
 	uint8_t pin;
-	int sda_route_loc, scl_route_loc;
+
 	CMU_ClockEnable(cmuClock_GPIO, true);
 	bshal_gpio_decode_pin(i2c_instance->scl_pin, &port, &pin);
 	GPIO_PinModeSet(port, pin, gpioModeWiredAndPullUpFilter, 1);
 #if GECKO == 1
+	int sda_route_loc, scl_route_loc;
 	// Calculated to allow for dynamic allocation
 	scl_route_loc = bshal_gpio_gecko_routeloc(port, pin);
 	if (-1 == scl_route_loc)
@@ -88,6 +89,7 @@ int bshal_gecko_i2cm_init(bshal_i2cm_instance_t *i2c_instance) {
 
 int bshal_gecko_i2cm_send(void *drv_specific, uint8_t address, void *p_data,
 		uint8_t length, bool nostop) {
+	(void)nostop;
 
 	I2C_TransferSeq_TypeDef i2cTransfer;
 	I2C_TransferReturn_TypeDef result;
@@ -110,6 +112,8 @@ int bshal_gecko_i2cm_send(void *drv_specific, uint8_t address, void *p_data,
 }
 int bshal_gecko_i2cm_recv(void *drv_specific, uint8_t address, void *p_data,
 		uint8_t length, bool nostop) {
+	(void)nostop;
+
 	I2C_TransferSeq_TypeDef i2cTransfer;
 	I2C_TransferReturn_TypeDef result;
 
