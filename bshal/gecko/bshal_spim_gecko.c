@@ -13,11 +13,11 @@
 #include <em_usart.h>
 
 
-int bshal_spim_transmit(bshal_spim_instance_t *spim_instance, void *data,
+int bshal_spim_transmit(bshal_spim_instance_t *spim_instance, const void *data,
 		size_t amount, bool nostop) {
 
 	bshal_gpio_write_pin(spim_instance->cs_pin, spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 
 	uint8_t *data8 = data;
 
@@ -26,7 +26,7 @@ int bshal_spim_transmit(bshal_spim_instance_t *spim_instance, void *data,
 
 	if (!nostop)
 		bshal_gpio_write_pin(spim_instance->cs_pin, !spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 	return 0;
 }
 
@@ -34,7 +34,7 @@ int bshal_spim_receive(bshal_spim_instance_t *spim_instance, void *data,
 		size_t amount, bool nostop) {
 
 	bshal_gpio_write_pin(spim_instance->cs_pin, spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 
 	uint8_t *data8 = data;
 
@@ -43,7 +43,7 @@ int bshal_spim_receive(bshal_spim_instance_t *spim_instance, void *data,
 
 	if (!nostop)
 		bshal_gpio_write_pin(spim_instance->cs_pin, !spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 	return 0;
 }
 
@@ -52,7 +52,7 @@ int bshal_spim_transceive(bshal_spim_instance_t *spim_instance, void *data,
 
 
 	bshal_gpio_write_pin(spim_instance->cs_pin, spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 
 	uint8_t *data8 = data;
 
@@ -61,6 +61,6 @@ int bshal_spim_transceive(bshal_spim_instance_t *spim_instance, void *data,
 
 	if (!nostop)
 		bshal_gpio_write_pin(spim_instance->cs_pin, !spim_instance->cs_pol);
-	bshal_delay_ms(1);
+//	bshal_delay_ms(1);
 	return 0;
 }
