@@ -58,7 +58,7 @@ int bshal_stm32_i2cm_isok(void *drv_specific, uint8_t address) {
 	return result;
 }
 
-int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length){
+int  bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, void * p_data, uint8_t length){
 
 	return HAL_I2C_Mem_Read(i2c_instance->drv_specific, address << 1, reg, 1, p_data, length, 1000);
 }

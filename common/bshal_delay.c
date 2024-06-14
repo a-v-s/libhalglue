@@ -166,8 +166,10 @@ int bshal_delay_init(void) {
 	// Also... can we make use a struct with bitfields instead
 	bool use_dwt = (CORTEX_M_ROMTABLE->dwt & 1) && (!(DWT->CTRL & (1 << 25)));
 
-	if (use_dwt)
+	if (use_dwt) {
 		bshal_delay_cycles = delay_cycles_dwt;
+		return 0;
+	}
 	else
 #endif
 		bshal_delay_cycles = delay_cycles_asm;

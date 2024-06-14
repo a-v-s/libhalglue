@@ -13,6 +13,8 @@
 #include "hal.h"
 #include "bshal_i2cm.h"
 
+int bshal_stm32_i2cm_init(bshal_i2cm_instance_t *i2c_instance) ;
+
 int bshal_stm32_i2cm_send(void *drv_specific, uint8_t address, void *p_data,
 		uint8_t length, bool nostop);
 int bshal_stm32_i2cm_recv(void *drv_specific, uint8_t address, void *p_data,

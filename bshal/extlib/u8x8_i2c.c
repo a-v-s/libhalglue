@@ -9,7 +9,7 @@
 
 
 #ifndef U8X8_WITH_USER_PTR
-#warning please use U8X8_WITH_USER_PTR
+#error please use U8X8_WITH_USER_PTR
 static bshal_i2cm_instance_t *mp_i2c;
 static u8g2_t *mp_u8g2;
 void bshal_u8x8_i2c_init(u8g2_t *p_u8g2, bshal_i2cm_instance_t *p_i2c) {

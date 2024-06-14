@@ -39,7 +39,7 @@ int bshal_i2cm_init(bshal_i2cm_instance_t *i2c_instance);
 int bshal_i2cm_send(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop);
 int bshal_i2cm_recv(bshal_i2cm_instance_t* i2c_instance, uint8_t address, void * p_data, uint8_t length, bool nostop);
 int bshal_i2cm_isok(bshal_i2cm_instance_t* i2c_instance, uint8_t address);
-int bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length);
-int bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, uint8_t * p_data, uint8_t length);
+int bshal_i2cm_send_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, void * p_data, uint8_t length);
+int bshal_i2cm_recv_reg(bshal_i2cm_instance_t* i2c_instance, uint8_t address, uint8_t reg, void * p_data, uint8_t length);
 
 #endif
