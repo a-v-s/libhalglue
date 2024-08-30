@@ -213,7 +213,7 @@ int bshal_spim_transceive_split(bshal_spim_instance_t *bshal_spim, void *txdata,
 }
 
 
-int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, void *data, size_t size,
+int bshal_spim_transmit(bshal_spim_instance_t *bshal_spim, const void *data, size_t size,
 		bool nostop) {
 
 	int result;
