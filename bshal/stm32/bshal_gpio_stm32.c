@@ -287,4 +287,6 @@ int bshal_gpio_cfg_in(uint8_t bshal_pin, gpio_drive_type_t drive_type, bool init
 	return -1;
 }
 
-int bshal_gpio_cfg_int(uint8_t pin){}
+int bshal_gpio_cfg_int(uint8_t pin){
+	return -1;
+}
