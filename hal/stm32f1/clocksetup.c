@@ -139,7 +139,7 @@ void ClockSetup_HSE8_SYS48(void) {
 }
 //------------------------------------------------------------------------------
 
-// Configure for internal HSI 8 Mhz Xtal, System speed to 48 MHz
+// Configure for internal HSI 8 Mhz RC, System speed to 48 MHz
 void ClockSetup_HSI_SYS48(void) {
 	RCC_ClkInitTypeDef clkinitstruct = { 0 };
 	RCC_OscInitTypeDef oscinitstruct = { 0 };
@@ -179,6 +179,47 @@ void ClockSetup_HSI_SYS48(void) {
 	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	clkinitstruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 	clkinitstruct.APB1CLKDivider = RCC_HCLK_DIV2;
+	clkinitstruct.APB2CLKDivider = RCC_HCLK_DIV1;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_1);
+	SystemCoreClockUpdate();
+}
+
+// Configure for internal HSI 8 Mhz RC, System speed to 36 MHz
+void ClockSetup_HSI_SYS36(void) {
+	RCC_ClkInitTypeDef clkinitstruct = { 0 };
+	RCC_OscInitTypeDef oscinitstruct = { 0 };
+	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
+
+	// If we wish to switch speed when already on PLL,
+	// We must detach the core from the PLL clock
+	clkinitstruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_0);
+
+	// Configure HSI Internal RC Oscillator. It runs at 8 MHz, but when used
+	// as an PLL input, it is divided by 2, so this gives 4 MHz
+	// 9 * 4 = 36
+	oscinitstruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+	oscinitstruct.HSIState = RCC_HSI_ON;
+	oscinitstruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+	oscinitstruct.PLL.PLLMUL = RCC_PLL_MUL9;
+	oscinitstruct.PLL.PLLState = RCC_PLL_ON;
+	oscinitstruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+	HAL_RCC_OscConfig(&oscinitstruct);
+
+
+	// SYS  Clock to 36 MHz (Max 72 MHz)
+	// AHB  Clock to 36 MHz (Max 72 MHz)
+	// APB1 Clock to 36     (Max 36 MHz)
+	// APB2 Clock to 36     (Max 72 MHz)
+	// Flash Latency to 1.
+	// Flash Latency should be increased for each 24 MHz of clock speed.
+	// ( 36 / 24 ) - 1 = 1.
+	clkinitstruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK
+			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+	clkinitstruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	clkinitstruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	clkinitstruct.APB1CLKDivider = RCC_HCLK_DIV1;
 	clkinitstruct.APB2CLKDivider = RCC_HCLK_DIV1;
 	HAL_RCC_ClockConfig(&clkinitstruct, FLASH_LATENCY_1);
 	SystemCoreClockUpdate();
