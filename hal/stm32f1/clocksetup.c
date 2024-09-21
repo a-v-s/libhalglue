@@ -188,7 +188,7 @@ void ClockSetup_HSI_SYS48(void) {
 void ClockSetup_HSI_SYS36(void) {
 	RCC_ClkInitTypeDef clkinitstruct = { 0 };
 	RCC_OscInitTypeDef oscinitstruct = { 0 };
-	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
+//	RCC_PeriphCLKInitTypeDef rccperiphclkinit = { 0 };
 
 	// If we wish to switch speed when already on PLL,
 	// We must detach the core from the PLL clock
