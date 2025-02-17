@@ -13,6 +13,8 @@
 #include "bshal_delay.h"
 #include <string.h>
 
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+
 //static bshal_spim_t *&((bshal_ucg_t*)(ucg_GetUserPtr(ucg)))->spim.instance;
 //
 //void ucg_com_bshal_set_config(bshal_spim_t *bsspim) {

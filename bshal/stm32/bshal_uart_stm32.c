@@ -95,6 +95,9 @@ int bshal_stm32_uart_init(bshal_uart_instance_t *uart_instance) {
 	GPIO_TypeDef *port = NULL;
 	uint16_t pin;
 
+	extern void bshal_gpio_decode_pin();
+	extern void bshal_gpio_port_enable_clock();
+
 	bshal_gpio_decode_pin(uart_instance->txd_pin, &port, &pin);
 	bshal_gpio_port_enable_clock(uart_instance->txd_pin);
 	GPIO_InitStruct.Pin       = pin;
@@ -125,6 +128,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
 	//__hacky_uart_instance->async->callback(__hacky_uart_instance->async->receive_buffer, Size);
+	extern void bshal_uart_recv_cb();
 	bshal_uart_recv_cb( __hacky_uart_instance->async, Size);
 	HAL_UARTEx_ReceiveToIdle_IT(__hacky_uart_instance->drv_specific, __hacky_uart_instance->async->receive_buffer, __hacky_uart_instance->async->receive_buffer_len);
 }

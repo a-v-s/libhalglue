@@ -56,6 +56,7 @@ char* cpuid() {
 	// 0xD21	m33
 	// 0xD22	m55
 	// 0xD23	m85
+	// 0x132	star mc1
 
 
 	if ((cpuid->PartNo & (0b11 << 10)) == (0b11 << 10)) {

@@ -31,7 +31,7 @@ int bshal_i2cm_isok(bshal_i2cm_instance_t *i2c_instance, uint8_t address) {
 
 }
 int bshal_i2cm_send_reg(bshal_i2cm_instance_t *i2c_instance, uint8_t address,
-		uint8_t reg, uint8_t *p_data, uint8_t length) {
+		uint8_t reg, void *p_data, uint8_t length) {
 	// Might have to look into queue mode for a better implementation not requiring this much stack space
 	uint8_t buff[length + 1];
 	buff[0] = reg;
@@ -41,7 +41,7 @@ int bshal_i2cm_send_reg(bshal_i2cm_instance_t *i2c_instance, uint8_t address,
 
 }
 int bshal_i2cm_recv_reg(bshal_i2cm_instance_t *i2c_instance, uint8_t address,
-		uint8_t reg, uint8_t *p_data, uint8_t length) {
+		uint8_t reg, void *p_data, uint8_t length) {
 	return i2c_master_write_read_device(i2c_instance->hw_nr, address, &reg, 1,
 			p_data, length, 1);
 }
